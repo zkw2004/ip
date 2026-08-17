@@ -53,6 +53,17 @@ public class Friday {
                 continue;
 
             }
+            else if (command.startsWith("unmark ")) {
+                int taskNumber = Integer.parseInt(command.substring(7));
+                int index = taskNumber - 1;
+                isDone.set(index, false);
+                System.out.println(line);
+                System.out.println(" OK, I've marked this task as not done yet:");
+                System.out.println(String.format("   [ ] %s", tasks.get(index)));
+                System.out.println(line);
+                continue;
+
+            }
             else if (command.equals("bye")) {
                 System.out.println(line);
                 System.out.println(" Bye. Hope to see you again soon!");
