@@ -33,3 +33,8 @@ Ensure that Java 25 is used when running the application or build tasks. On macO
 Use lightweight tags unless the user requests an annotated tag.
 When proposing or creating a commit message, include enough detail to explain the rationale for the change.
 Do not commit or push unless explicitly asked.
+
+## UI regression workflow
+
+After each code update, review `test/ui-test-plan.md` and update it if the change affects the console interaction being tested.
+After updating the code (and test plan, if needed), invoke the `test-ui` skill to run the UI test cases and surface any transcript mismatches immediately.
