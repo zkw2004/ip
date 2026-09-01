@@ -15,6 +15,17 @@ public class Task {
     public void unmarkAsDone() {
         this.isDone = false;
     }
+
+    /**
+     * Converts the common task fields into the format used in the data file.
+     * Subclasses add their task type and any additional fields.
+     *
+     * @return The completion status and description separated by pipes.
+     */
+    public String toFileString() {
+        return String.format("%d | %s", isDone ? 1 : 0, description);
+    }
+
     @Override
     public String toString() {
         return String.format("[%s] %s", getStatusIcon(), description);

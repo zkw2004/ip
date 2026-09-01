@@ -37,6 +37,19 @@ full expected transcript here
 
 The expected output must be the full console transcript for that case, including the greeting banner and separators, because the runner compares exact normalized output.
 
+For a test that needs tasks to exist before the chatbot starts, add an optional
+`Initial Data` block after `Expected Output`:
+
+````md
+Initial Data:
+```text
+T | 1 | read book
+```
+````
+
+The runner isolates the data file for every case and restores any file that
+existed before the test run.
+
 ## Run tests
 
 From the repository root, run:
@@ -50,8 +63,9 @@ The runner:
 1. Reads `test/ui-test-plan.md`
 2. Compiles `src/main/java/*.java`
 3. Runs one chatbot session per test case
-4. Saves the console input/output record to `_temp/ui-test-record.md`
-5. Stops on the first failure and prints the expected and actual outputs
+4. Prepares isolated initial task data when a case provides it
+5. Saves the console input/output record to `_temp/ui-test-record.md`
+6. Stops on the first failure and prints the expected and actual outputs
 
 ## Reporting
 

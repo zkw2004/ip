@@ -4,6 +4,12 @@ public class Deadline extends Task {
         super(description);
         this.due_date = due_date;
     }
+
+    @Override
+    public String toFileString() {
+        return "D | " + super.toFileString() + " | " + due_date;
+    }
+
     @Override
     public String toString() {
         return "[D]" + super.toString() + " (by: " + due_date + ")";

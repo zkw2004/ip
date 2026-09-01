@@ -26,10 +26,10 @@ public class Friday {
      * Starts the chatbot and processes user commands until the user exits.
      *
      * @param args Command-line arguments, which are not used by this program.
-     * @throws IOException If the task list cannot be saved to the data file.
+     * @throws IOException If the task list cannot be loaded or saved.
      */
     public static void main(String[] args) throws IOException {
-        ArrayList<Task> tasks = new ArrayList<>();
+        ArrayList<Task> tasks = loadTasks();
         Scanner scanner = new Scanner(System.in);
 
         printGreeting();
@@ -67,8 +67,61 @@ public class Friday {
     }
 
     /**
+     * Loads all tasks from the data file. A missing file represents an empty
+     * task list, which is the expected situation on the first run.
+     *
+     * @return The tasks reconstructed from the data file.
+     * @throws IOException If an existing data file cannot be read.
+     */
+    private static ArrayList<Task> loadTasks() throws IOException {
+        ArrayList<Task> tasks = new ArrayList<>();
+        if (!Files.exists(DATA_FILE)) {
+            return tasks;
+        }
+
+        List<String> taskLines = Files.readAllLines(DATA_FILE, StandardCharsets.UTF_8);
+        for (String taskLine : taskLines) {
+            tasks.add(parseSavedTask(taskLine));
+        }
+        return tasks;
+    }
+
+    /**
+     * Reconstructs one task from its pipe-separated file representation.
+     *
+     * @param taskLine One line read from the data file.
+     * @return The reconstructed task.
+     */
+    private static Task parseSavedTask(String taskLine) {
+        String[] fields = taskLine.split(" \\| ", -1);
+        String taskType = fields[0];
+        boolean isDone = fields[1].equals("1");
+        String description = fields[2];
+
+        Task task;
+        switch (taskType) {
+        case "T":
+            task = new ToDo(description);
+            break;
+        case "D":
+            task = new Deadline(description, fields[3]);
+            break;
+        case "E":
+            task = new Event(description, fields[3], fields[4]);
+            break;
+        default:
+            throw new IllegalArgumentException("Unknown task type: " + taskType);
+        }
+
+        if (isDone) {
+            task.markAsDone();
+        }
+        return task;
+    }
+
+    /**
      * Replaces the data file contents with the current task list. Each task is
-     * stored on its own line using the same readable format shown by the chatbot.
+     * stored on its own line in a pipe-separated format that can be loaded later.
      *
      * @param tasks The complete task list to save.
      * @throws IOException If the data directory or file cannot be written.
@@ -76,8 +129,8 @@ public class Friday {
     private static void saveTasks(ArrayList<Task> tasks) throws IOException {
         Files.createDirectories(DATA_FILE.getParent());
         List<String> taskLines = new ArrayList<>();
-        for (Task task: tasks) {
-            taskLines.add(task.toString());
+        for (Task task : tasks) {
+            taskLines.add(task.toFileString());
         }
         Files.write(DATA_FILE, taskLines, StandardCharsets.UTF_8);
     }

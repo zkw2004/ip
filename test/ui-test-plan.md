@@ -585,3 +585,44 @@ ____________________________________________________________
  Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+## Test Case: load-saved-task-list
+Aim:
+Verify that todos, deadlines, and events are loaded with their saved completion statuses when Friday starts.
+
+Inputs:
+```text
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1. [T][X] read book
+ 2. [D][ ] return book (by: June 6th)
+ 3. [E][X] project meeting (from: Aug 6th 2pmto: 4pm)
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Initial Data:
+```text
+T | 1 | read book
+D | 0 | return book | June 6th
+E | 1 | project meeting | Aug 6th 2pm | 4pm
+```
