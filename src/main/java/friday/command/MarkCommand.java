@@ -21,6 +21,14 @@ public class MarkCommand extends Command {
         this.taskNumber = taskNumber;
     }
 
+    /**
+     * Marks the requested task as completed and reports the change.
+     *
+     * @param tasks Current task list to modify.
+     * @param ui UI used to display the confirmation.
+     * @param storage Storage available to the command; saving is coordinated by Friday.
+     * @throws FridayException If the task number is not valid.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws FridayException {
         Task task = getTask(tasks, taskNumber);
@@ -28,6 +36,11 @@ public class MarkCommand extends Command {
         ui.showTaskStatus(task, true);
     }
 
+    /**
+     * Indicates that executing this command changes persisted state.
+     *
+     * @return true because a completion status is changed.
+     */
     @Override
     public boolean changesTasks() {
         return true;

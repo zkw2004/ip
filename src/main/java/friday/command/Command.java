@@ -14,6 +14,12 @@ import friday.ui.Ui;
  */
 public abstract class Command {
     /**
+     * Creates a command.
+     */
+    public Command() {
+    }
+
+    /**
      * Executes this command against the current application state.
      *
      * @param tasks Current task list.
@@ -24,6 +30,8 @@ public abstract class Command {
     public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws FridayException;
 
     /**
+     * Commands do not exit unless they override this default.
+     *
      * @return Whether this command should end the application loop.
      */
     public boolean isExit() {
@@ -31,6 +39,8 @@ public abstract class Command {
     }
 
     /**
+     * Commands do not change tasks unless they override this default.
+     *
      * @return Whether this command changed the task list and should be saved.
      */
     public boolean changesTasks() {

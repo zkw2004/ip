@@ -92,6 +92,8 @@ public class Storage {
         }
 
         /**
+         * Returns the successfully reconstructed tasks from the load operation.
+         *
          * @return The successfully reconstructed tasks.
          */
         public List<Task> getTasks() {
@@ -99,6 +101,8 @@ public class Storage {
         }
 
         /**
+         * Returns warnings for records that could not be reconstructed.
+         *
          * @return Warnings describing skipped malformed records.
          */
         public List<String> getWarnings() {

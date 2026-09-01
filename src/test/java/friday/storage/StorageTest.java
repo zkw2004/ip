@@ -24,6 +24,9 @@ class StorageTest {
     @TempDir
     Path temporaryDirectory;
 
+    /**
+     * Verifies that all task types and completion states survive a round trip.
+     */
     @Test
     void saveThenLoad_roundTripsAllTaskTypesAndCompletionStatus() throws Exception {
         Storage storage = new Storage(temporaryDirectory.resolve("nested/friday.txt").toString());
@@ -45,6 +48,9 @@ class StorageTest {
                 loaded.getTasks().get(2).toString());
     }
 
+    /**
+     * Verifies that loading a missing file returns an empty result.
+     */
     @Test
     void load_missingFile_returnsEmptyResultWithoutWarnings() throws Exception {
         Storage storage = new Storage(temporaryDirectory.resolve("missing/friday.txt").toString());
@@ -55,6 +61,9 @@ class StorageTest {
         assertTrue(result.getWarnings().isEmpty());
     }
 
+    /**
+     * Verifies that malformed records are skipped while valid records load.
+     */
     @Test
     void load_corruptedRecords_skipsInvalidLinesAndLoadsValidRecords() throws Exception {
         Path dataFile = temporaryDirectory.resolve("friday.txt");
