@@ -1,4 +1,9 @@
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -7,6 +12,7 @@ import java.util.Scanner;
 public class Friday {
     private static final String LINE = "____________________________________________________________";
     private static final String NAME = "Friday";
+    private static final Path DATA_FILE = Path.of("data", "friday.txt");
     private static final String BANNER = """
              _____    _     _
             |  ___| _(_) __| | __ _ _   _
@@ -20,8 +26,9 @@ public class Friday {
      * Starts the chatbot and processes user commands until the user exits.
      *
      * @param args Command-line arguments, which are not used by this program.
+     * @throws IOException If the task list cannot be saved to the data file.
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
         Scanner scanner = new Scanner(System.in);
 
@@ -38,13 +45,17 @@ public class Friday {
                     printTaskList(tasks);
                 } else if (command.startsWith("delete ")) {
                     deleteTask(tasks, command.substring(7));
+                    saveTasks(tasks);
                 } else if (command.startsWith("mark ")) {
                     updateTaskStatus(tasks, command.substring(5), true);
+                    saveTasks(tasks);
                 } else if (command.startsWith("unmark ")) {
                     updateTaskStatus(tasks, command.substring(7), false);
+                    saveTasks(tasks);
                 } else {
                     Task newTask = parseTask(command);
                     tasks.add(newTask);
+                    saveTasks(tasks);
                     printTaskAdded(newTask, tasks.size());
                 }
             } catch (FridayException e) {
@@ -53,6 +64,22 @@ public class Friday {
         }
 
         scanner.close();
+    }
+
+    /**
+     * Replaces the data file contents with the current task list. Each task is
+     * stored on its own line using the same readable format shown by the chatbot.
+     *
+     * @param tasks The complete task list to save.
+     * @throws IOException If the data directory or file cannot be written.
+     */
+    private static void saveTasks(ArrayList<Task> tasks) throws IOException {
+        Files.createDirectories(DATA_FILE.getParent());
+        List<String> taskLines = new ArrayList<>();
+        for (Task task: tasks) {
+            taskLines.add(task.toString());
+        }
+        Files.write(DATA_FILE, taskLines, StandardCharsets.UTF_8);
     }
 
     private static void deleteTask(ArrayList<Task> tasks, String taskNumberText) throws FridayException {
