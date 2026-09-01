@@ -7,7 +7,7 @@ import java.util.Locale;
 /**
  * A task with a start and end date-time.
  */
-public class Event extends Task{
+public class Event extends Task {
     private static final DateTimeFormatter DISPLAY_FORMAT =
             DateTimeFormatter.ofPattern("MMM dd uuuu HH:mm", Locale.ENGLISH);
     private LocalDateTime from;

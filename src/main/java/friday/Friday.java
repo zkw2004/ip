@@ -4,9 +4,9 @@ import java.io.IOException;
 
 import friday.command.Command;
 import friday.exception.FridayException;
+import friday.model.TaskList;
 import friday.parser.Parser;
 import friday.storage.Storage;
-import friday.model.TaskList;
 import friday.ui.Ui;
 
 /**
