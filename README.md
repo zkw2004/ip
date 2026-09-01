@@ -24,3 +24,22 @@ Prerequisites: JDK 25, update Intellij to the most recent version.
    ```
 
 **Warning:** Keep the `src\main\java` folder as the root folder for Java files (i.e., don't rename those folders or move Java files to another folder outside of this folder path), as this is the default location some tools (e.g., Gradle) expect to find Java files.
+
+## Creating and running the fat JAR
+
+From the project root, create the self-contained JAR with:
+
+```bash
+./gradlew shadowJar
+```
+
+On Windows, use `gradlew.bat shadowJar` instead. The generated file is:
+`build/libs/friday-all.jar`.
+
+Run it with:
+
+```bash
+java -jar build/libs/friday-all.jar
+```
+
+The JAR includes the application classes and runtime dependencies, so Java is the only runtime requirement.
