@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import friday.command.AddCommand;
 import friday.command.DeleteCommand;
 import friday.command.ExitCommand;
+import friday.command.FindCommand;
 import friday.command.ListCommand;
 import friday.command.MarkCommand;
 import friday.command.UnmarkCommand;
@@ -44,6 +45,7 @@ class ParserTest {
         assertInstanceOf(DeleteCommand.class, parser.parse("delete 2"));
         assertInstanceOf(MarkCommand.class, parser.parse("mark 2"));
         assertInstanceOf(UnmarkCommand.class, parser.parse("unmark 2"));
+        assertInstanceOf(FindCommand.class, parser.parse("find book"));
         assertInstanceOf(AddCommand.class, parser.parse("todo read book"));
         assertInstanceOf(AddCommand.class, parser.parse("deadline return book /by 2019-06-06"));
         assertInstanceOf(AddCommand.class,
@@ -87,6 +89,16 @@ class ParserTest {
         FridayException exception = assertThrows(FridayException.class, () -> parser.parse("delete two"));
 
         assertEquals("Please enter a valid task number.", exception.getMessage());
+    }
+
+    /**
+     * Verifies that a find command without a keyword is rejected.
+     */
+    @Test
+    void parse_emptyFindKeyword_throwsFridayException() {
+        FridayException exception = assertThrows(FridayException.class, () -> parser.parse("find"));
+
+        assertEquals("Please provide a keyword to find.", exception.getMessage());
     }
 
     /**

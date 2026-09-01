@@ -11,6 +11,7 @@ import friday.command.AddCommand;
 import friday.command.Command;
 import friday.command.DeleteCommand;
 import friday.command.ExitCommand;
+import friday.command.FindCommand;
 import friday.command.ListCommand;
 import friday.command.MarkCommand;
 import friday.command.UnmarkCommand;
@@ -52,6 +53,8 @@ public class Parser {
             return new ExitCommand();
         } else if (input.equals("list")) {
             return new ListCommand();
+        } else if (input.equals("find") || input.startsWith("find ")) {
+            return new FindCommand(parseFindKeyword(input));
         } else if (input.startsWith("delete ")) {
             return new DeleteCommand(parseTaskNumber(input.substring(7)));
         } else if (input.startsWith("mark ")) {
@@ -95,6 +98,21 @@ public class Parser {
         } catch (NumberFormatException e) {
             throw new FridayException("Please enter a valid task number.");
         }
+    }
+
+    /**
+     * Extracts and validates the keyword from a find command.
+     *
+     * @param command Full find command.
+     * @return The non-empty search keyword.
+     * @throws FridayException If no keyword was supplied.
+     */
+    private static String parseFindKeyword(String command) throws FridayException {
+        String keyword = command.substring(4).trim();
+        if (keyword.isEmpty()) {
+            throw new FridayException("Please provide a keyword to find.");
+        }
+        return keyword;
     }
 
     /**

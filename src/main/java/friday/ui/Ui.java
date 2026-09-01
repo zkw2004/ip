@@ -1,5 +1,6 @@
 package friday.ui;
 
+import java.util.List;
 import java.util.Scanner;
 
 import friday.model.Task;
@@ -71,6 +72,23 @@ public class Ui {
         System.out.println(" Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println(String.format(" %d. %s", i + 1, tasks.get(i)));
+        }
+        System.out.println(LINE);
+    }
+
+    /**
+     * Prints tasks whose descriptions match a search keyword.
+     *
+     * @param matchingTasks Tasks selected by the find command.
+     */
+    public void showMatchingTasks(List<Task> matchingTasks) {
+        System.out.println(LINE);
+        System.out.println(" Here are the matching tasks in your list:");
+        for (int i = 0; i < matchingTasks.size(); i++) {
+            System.out.println(String.format(" %d. %s", i + 1, matchingTasks.get(i)));
+        }
+        if (matchingTasks.isEmpty()) {
+            System.out.println(" No matching tasks found.");
         }
         System.out.println(LINE);
     }

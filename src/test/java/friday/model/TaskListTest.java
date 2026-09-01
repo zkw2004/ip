@@ -167,4 +167,28 @@ class TaskListTest {
         assertEquals(List.of(first, second), view);
         assertThrows(UnsupportedOperationException.class, () -> view.add(new ToDo("blocked")));
     }
+
+    /**
+     * Verifies that find is case-insensitive and preserves task order.
+     */
+    @Test
+    void find_keywordMatchesDescriptionIgnoringCase_andPreservesOrder() {
+        Task first = new ToDo("Read a book");
+        Task second = new ToDo("Return the book");
+        TaskList tasks = new TaskList(List.of(first, new ToDo("Write notes"), second));
+
+        List<Task> matches = tasks.find("BOOK");
+
+        assertEquals(List.of(first, second), matches);
+    }
+
+    /**
+     * Verifies that find returns no tasks when the keyword is absent.
+     */
+    @Test
+    void find_unknownKeyword_returnsEmptyList() {
+        TaskList tasks = new TaskList(List.of(new ToDo("Read a book")));
+
+        assertEquals(List.of(), tasks.find("meeting"));
+    }
 }
