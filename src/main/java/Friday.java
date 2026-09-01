@@ -47,13 +47,13 @@ public class Friday {
 
         printGreeting();
 
-        ArrayList<Task> tasks;
+        TaskList tasks;
         boolean canSaveTasks;
         try {
-            tasks = loadTasks();
+            tasks = new TaskList(loadTasks());
             canSaveTasks = true;
         } catch (IOException e) {
-            tasks = new ArrayList<>();
+            tasks = new TaskList();
             canSaveTasks = false;
             printError("I couldn't read the saved tasks, so I've started with an empty list. "
                     + "Saving is disabled for this session to protect the existing data.");
@@ -260,7 +260,7 @@ public class Friday {
      * @param tasks The complete task list to save.
      * @param canSaveTasks Whether loading succeeded and saving is safe for this session.
      */
-    private static void saveTasksSafely(ArrayList<Task> tasks, boolean canSaveTasks) {
+    private static void saveTasksSafely(TaskList tasks, boolean canSaveTasks) {
         if (!canSaveTasks) {
             printError("I couldn't save your tasks because the existing data file could not be read.");
             return;
@@ -280,16 +280,16 @@ public class Friday {
      * @param tasks The complete task list to save.
      * @throws IOException If the data directory or file cannot be written.
      */
-    private static void saveTasks(ArrayList<Task> tasks) throws IOException {
+    private static void saveTasks(TaskList tasks) throws IOException {
         Files.createDirectories(DATA_FILE.getParent());
         List<String> taskLines = new ArrayList<>();
-        for (Task task : tasks) {
+        for (Task task : tasks.asList()) {
             taskLines.add(task.toFileString());
         }
         Files.write(DATA_FILE, taskLines, StandardCharsets.UTF_8);
     }
 
-    private static void deleteTask(ArrayList<Task> tasks, String taskNumberText) throws FridayException {
+    private static void deleteTask(TaskList tasks, String taskNumberText) throws FridayException {
         int taskNumber;
 
         try {
@@ -326,7 +326,7 @@ public class Friday {
      *
      * @param tasks The task list to display.
      */
-    private static void printTaskList(ArrayList<Task> tasks) {
+    private static void printTaskList(TaskList tasks) {
         System.out.println(LINE);
         System.out.println(" Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
@@ -343,7 +343,7 @@ public class Friday {
      * @param markDone Whether the task should be marked done or not done.
      * @throws FridayException If the task number is not a valid existing task.
      */
-    private static void updateTaskStatus(ArrayList<Task> tasks, String taskNumberText, boolean markDone)
+    private static void updateTaskStatus(TaskList tasks, String taskNumberText, boolean markDone)
             throws FridayException {
         int taskNumber;
 
