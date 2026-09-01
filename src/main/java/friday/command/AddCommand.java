@@ -1,3 +1,10 @@
+package friday.command;
+
+import friday.model.Task;
+import friday.model.TaskList;
+import friday.storage.Storage;
+import friday.ui.Ui;
+
 /**
  * Adds a parsed task to the task list.
  */

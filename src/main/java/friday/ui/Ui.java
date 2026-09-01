@@ -1,4 +1,9 @@
+package friday.ui;
+
 import java.util.Scanner;
+
+import friday.model.Task;
+import friday.model.TaskList;
 
 /**
  * Handles Friday's console input and user-facing output.
