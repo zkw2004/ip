@@ -32,32 +32,16 @@ public class Friday {
         }
 
         while (ui.hasNextCommand()) {
-            String command = ui.readCommand();
+            String fullCommand = ui.readCommand();
 
             try {
-                Parser.Command parsedCommand = parser.parse(command);
-                if (parsedCommand.getType() == Parser.CommandType.BYE) {
-                    ui.showExitMessage();
+                Command command = parser.parse(fullCommand);
+                command.execute(tasks, ui, storage);
+                if (command.changesTasks()) {
+                    saveTasksSafely(ui, storage, tasks, canSaveTasks);
+                }
+                if (command.isExit()) {
                     break;
-                } else if (parsedCommand.getType() == Parser.CommandType.LIST) {
-                    ui.showTaskList(tasks);
-                } else if (parsedCommand.getType() == Parser.CommandType.DELETE) {
-                    Task removedTask = deleteTask(tasks, parsedCommand.getTaskNumber());
-                    ui.showTaskDeleted(removedTask, tasks.size());
-                    saveTasksSafely(ui, storage, tasks, canSaveTasks);
-                } else if (parsedCommand.getType() == Parser.CommandType.MARK) {
-                    Task task = updateTaskStatus(tasks, parsedCommand.getTaskNumber(), true);
-                    ui.showTaskStatus(task, true);
-                    saveTasksSafely(ui, storage, tasks, canSaveTasks);
-                } else if (parsedCommand.getType() == Parser.CommandType.UNMARK) {
-                    Task task = updateTaskStatus(tasks, parsedCommand.getTaskNumber(), false);
-                    ui.showTaskStatus(task, false);
-                    saveTasksSafely(ui, storage, tasks, canSaveTasks);
-                } else {
-                    Task newTask = parsedCommand.getTask();
-                    tasks.add(newTask);
-                    ui.showTaskAdded(newTask, tasks.size());
-                    saveTasksSafely(ui, storage, tasks, canSaveTasks);
                 }
             } catch (FridayException e) {
                 ui.showError(e.getMessage());
@@ -89,35 +73,4 @@ public class Friday {
         }
     }
 
-    private static Task deleteTask(TaskList tasks, int taskNumber) throws FridayException {
-        int index = taskNumber - 1;
-        if (index < 0 || index >= tasks.size()) {
-            throw new FridayException("Please enter a valid task number.");
-        }
-        return tasks.remove(index);
-    }
-
-    /**
-     * Marks or unmarks a task after validating the supplied task number.
-     *
-     * @param tasks The task list containing the task to update.
-     * @param taskNumber The user-supplied task number.
-     * @param markDone Whether the task should be marked done or not done.
-     * @throws FridayException If the task number is not a valid existing task.
-     */
-    private static Task updateTaskStatus(TaskList tasks, int taskNumber, boolean markDone)
-            throws FridayException {
-        int index = taskNumber - 1;
-        if (index < 0 || index >= tasks.size()) {
-            throw new FridayException("Please enter a valid task number.");
-        }
-
-        Task task = tasks.get(index);
-        if (markDone) {
-            task.markAsDone();
-        } else {
-            task.unmarkAsDone();
-        }
-        return task;
-    }
 }

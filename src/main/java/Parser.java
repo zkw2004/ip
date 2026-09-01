@@ -23,66 +23,23 @@ public class Parser {
      * Parses one line of user input.
      *
      * @param input Raw command entered by the user.
-     * @return A validated command containing any parsed task or task number.
+     * @return A parsed executable command.
      * @throws FridayException If the input is not a supported valid command.
      */
     public Command parse(String input) throws FridayException {
         if (input.equals("bye")) {
-            return new Command(CommandType.BYE, null, null);
+            return new ExitCommand();
         } else if (input.equals("list")) {
-            return new Command(CommandType.LIST, null, null);
+            return new ListCommand();
         } else if (input.startsWith("delete ")) {
-            return new Command(CommandType.DELETE, parseTaskNumber(input.substring(7)), null);
+            return new DeleteCommand(parseTaskNumber(input.substring(7)));
         } else if (input.startsWith("mark ")) {
-            return new Command(CommandType.MARK, parseTaskNumber(input.substring(5)), null);
+            return new MarkCommand(parseTaskNumber(input.substring(5)));
         } else if (input.startsWith("unmark ")) {
-            return new Command(CommandType.UNMARK, parseTaskNumber(input.substring(7)), null);
+            return new UnmarkCommand(parseTaskNumber(input.substring(7)));
         }
 
-        return new Command(CommandType.ADD, null, parseTask(input));
-    }
-
-    /**
-     * The kinds of commands understood by Friday.
-     */
-    public enum CommandType {
-        BYE, LIST, DELETE, MARK, UNMARK, ADD
-    }
-
-    /**
-     * A validated command and the data needed to execute it.
-     */
-    public static final class Command {
-        private final CommandType type;
-        private final Integer taskNumber;
-        private final Task task;
-
-        private Command(CommandType type, Integer taskNumber, Task task) {
-            this.type = type;
-            this.taskNumber = taskNumber;
-            this.task = task;
-        }
-
-        /**
-         * @return The command kind.
-         */
-        public CommandType getType() {
-            return type;
-        }
-
-        /**
-         * @return The parsed task number for delete, mark, and unmark commands.
-         */
-        public Integer getTaskNumber() {
-            return taskNumber;
-        }
-
-        /**
-         * @return The new task for an add command.
-         */
-        public Task getTask() {
-            return task;
-        }
+        return new AddCommand(parseTask(input));
     }
 
     /**
