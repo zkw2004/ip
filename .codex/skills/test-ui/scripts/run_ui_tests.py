@@ -102,6 +102,10 @@ def run_case(test_case: TestCase) -> str:
 def prepare_data_file(test_case: TestCase) -> None:
     """Give each test case an isolated task data file."""
     DATA_FILE_PATH.unlink(missing_ok=True)
+    try:
+        DATA_FILE_PATH.parent.rmdir()
+    except OSError:
+        pass
     if test_case.initial_data is not None:
         DATA_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
         DATA_FILE_PATH.write_text(test_case.initial_data + "\n", encoding="utf-8")

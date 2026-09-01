@@ -626,3 +626,122 @@ T | 1 | read book
 D | 0 | return book | June 6th
 E | 1 | project meeting | Aug 6th 2pm | 4pm
 ```
+
+## Test Case: start-without-data-file
+Aim:
+Verify that Friday starts with an empty task list when the data file and its folder do not exist yet.
+
+Inputs:
+```text
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+## Test Case: skip-corrupted-task-data
+Aim:
+Verify that Friday skips malformed saved records, explains each problem, and still loads valid records.
+
+Inputs:
+```text
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ OOPS!!! I skipped corrupted task data on line 2: completion status must be 0 or 1.
+____________________________________________________________
+____________________________________________________________
+ OOPS!!! I skipped corrupted task data on line 3: unknown task type 'X'.
+____________________________________________________________
+____________________________________________________________
+ OOPS!!! I skipped corrupted task data on line 4: wrong number of fields for task type 'E'.
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1. [T][X] valid todo
+ 2. [D][ ] valid deadline (by: Sunday)
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Initial Data:
+```text
+T | 1 | valid todo
+D | 2 | bad status | Friday
+X | 0 | unknown task
+E | 0 | missing end | 2pm
+D | 0 | valid deadline | Sunday
+```
+
+## Test Case: load-escaped-task-fields
+Aim:
+Verify that pipe and backslash characters inside saved task fields are not mistaken for field separators.
+
+Inputs:
+```text
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1. [T][ ] compare A | B in C:\temp
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Initial Data:
+```text
+T | 0 | compare A \| B in C:\\temp
+```

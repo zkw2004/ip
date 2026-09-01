@@ -26,15 +26,25 @@ public class Friday {
      * Starts the chatbot and processes user commands until the user exits.
      *
      * @param args Command-line arguments, which are not used by this program.
-     * @throws IOException If the task list cannot be loaded or saved.
      */
-    public static void main(String[] args) throws IOException {
-        ArrayList<Task> tasks = loadTasks();
+    public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
         printGreeting();
 
-        while (true) {
+        ArrayList<Task> tasks;
+        boolean canSaveTasks;
+        try {
+            tasks = loadTasks();
+            canSaveTasks = true;
+        } catch (IOException e) {
+            tasks = new ArrayList<>();
+            canSaveTasks = false;
+            printError("I couldn't read the saved tasks, so I've started with an empty list. "
+                    + "Saving is disabled for this session to protect the existing data.");
+        }
+
+        while (scanner.hasNextLine()) {
             String command = scanner.nextLine();
 
             try {
@@ -45,18 +55,18 @@ public class Friday {
                     printTaskList(tasks);
                 } else if (command.startsWith("delete ")) {
                     deleteTask(tasks, command.substring(7));
-                    saveTasks(tasks);
+                    saveTasksSafely(tasks, canSaveTasks);
                 } else if (command.startsWith("mark ")) {
                     updateTaskStatus(tasks, command.substring(5), true);
-                    saveTasks(tasks);
+                    saveTasksSafely(tasks, canSaveTasks);
                 } else if (command.startsWith("unmark ")) {
                     updateTaskStatus(tasks, command.substring(7), false);
-                    saveTasks(tasks);
+                    saveTasksSafely(tasks, canSaveTasks);
                 } else {
                     Task newTask = parseTask(command);
                     tasks.add(newTask);
-                    saveTasks(tasks);
                     printTaskAdded(newTask, tasks.size());
+                    saveTasksSafely(tasks, canSaveTasks);
                 }
             } catch (FridayException e) {
                 printError(e.getMessage());
@@ -75,13 +85,17 @@ public class Friday {
      */
     private static ArrayList<Task> loadTasks() throws IOException {
         ArrayList<Task> tasks = new ArrayList<>();
-        if (!Files.exists(DATA_FILE)) {
+        if (Files.notExists(DATA_FILE)) {
             return tasks;
         }
 
         List<String> taskLines = Files.readAllLines(DATA_FILE, StandardCharsets.UTF_8);
-        for (String taskLine : taskLines) {
-            tasks.add(parseSavedTask(taskLine));
+        for (int i = 0; i < taskLines.size(); i++) {
+            try {
+                tasks.add(parseSavedTask(taskLines.get(i)));
+            } catch (FridayException e) {
+                printError(String.format("I skipped corrupted task data on line %d: %s", i + 1, e.getMessage()));
+            }
         }
         return tasks;
     }
@@ -91,12 +105,42 @@ public class Friday {
      *
      * @param taskLine One line read from the data file.
      * @return The reconstructed task.
+     * @throws FridayException If the line does not follow the expected file format.
      */
-    private static Task parseSavedTask(String taskLine) {
-        String[] fields = taskLine.split(" \\| ", -1);
+    private static Task parseSavedTask(String taskLine) throws FridayException {
+        String[] fields = splitSavedTaskFields(taskLine);
+        if (fields.length < 3) {
+            throw new FridayException("expected a task type, status, and description.");
+        }
+
         String taskType = fields[0];
-        boolean isDone = fields[1].equals("1");
+        String status = fields[1];
         String description = fields[2];
+
+        int expectedFieldCount;
+        switch (taskType) {
+        case "T":
+            expectedFieldCount = 3;
+            break;
+        case "D":
+            expectedFieldCount = 4;
+            break;
+        case "E":
+            expectedFieldCount = 5;
+            break;
+        default:
+            throw new FridayException("unknown task type '" + taskType + "'.");
+        }
+
+        if (fields.length != expectedFieldCount) {
+            throw new FridayException("wrong number of fields for task type '" + taskType + "'.");
+        }
+        if (!status.equals("0") && !status.equals("1")) {
+            throw new FridayException("completion status must be 0 or 1.");
+        }
+        if (description.isBlank()) {
+            throw new FridayException("task description cannot be empty.");
+        }
 
         Task task;
         switch (taskType) {
@@ -104,19 +148,84 @@ public class Friday {
             task = new ToDo(description);
             break;
         case "D":
+            if (fields[3].isBlank()) {
+                throw new FridayException("deadline date cannot be empty.");
+            }
             task = new Deadline(description, fields[3]);
             break;
         case "E":
+            if (fields[3].isBlank() || fields[4].isBlank()) {
+                throw new FridayException("event start and end times cannot be empty.");
+            }
             task = new Event(description, fields[3], fields[4]);
             break;
         default:
-            throw new IllegalArgumentException("Unknown task type: " + taskType);
+            throw new AssertionError("Task type was validated earlier.");
         }
 
-        if (isDone) {
+        if (status.equals("1")) {
             task.markAsDone();
         }
         return task;
+    }
+
+    /**
+     * Splits a saved task line at unescaped pipe separators and restores escaped
+     * pipe and backslash characters inside individual fields.
+     *
+     * @param taskLine One line read from the task file.
+     * @return The unescaped fields from the line.
+     */
+    private static String[] splitSavedTaskFields(String taskLine) {
+        List<String> fields = new ArrayList<>();
+        StringBuilder currentField = new StringBuilder();
+
+        for (int i = 0; i < taskLine.length(); i++) {
+            char currentCharacter = taskLine.charAt(i);
+            if (currentCharacter == '\\' && i + 1 < taskLine.length()) {
+                char nextCharacter = taskLine.charAt(i + 1);
+                if (nextCharacter == '\\' || nextCharacter == '|') {
+                    currentField.append(nextCharacter);
+                    i++;
+                    continue;
+                }
+            }
+
+            boolean isSeparator = currentCharacter == ' '
+                    && i + 2 < taskLine.length()
+                    && taskLine.charAt(i + 1) == '|'
+                    && taskLine.charAt(i + 2) == ' ';
+            if (isSeparator) {
+                fields.add(currentField.toString());
+                currentField.setLength(0);
+                i += 2;
+            } else {
+                currentField.append(currentCharacter);
+            }
+        }
+
+        fields.add(currentField.toString());
+        return fields.toArray(new String[0]);
+    }
+
+    /**
+     * Attempts to save the task list and reports a friendly error if writing
+     * fails, allowing the chatbot to continue running with its in-memory list.
+     *
+     * @param tasks The complete task list to save.
+     * @param canSaveTasks Whether loading succeeded and saving is safe for this session.
+     */
+    private static void saveTasksSafely(ArrayList<Task> tasks, boolean canSaveTasks) {
+        if (!canSaveTasks) {
+            printError("I couldn't save your tasks because the existing data file could not be read.");
+            return;
+        }
+
+        try {
+            saveTasks(tasks);
+        } catch (IOException e) {
+            printError("I couldn't save your tasks. Your latest changes might not be available next time.");
+        }
     }
 
     /**

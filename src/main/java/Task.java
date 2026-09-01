@@ -23,7 +23,18 @@ public class Task {
      * @return The completion status and description separated by pipes.
      */
     public String toFileString() {
-        return String.format("%d | %s", isDone ? 1 : 0, description);
+        return String.format("%d | %s", isDone ? 1 : 0, escapeFileField(description));
+    }
+
+    /**
+     * Escapes characters that have a special meaning in the task file format.
+     * Backslashes are escaped first so newly added pipe escapes remain distinct.
+     *
+     * @param value A task field to store.
+     * @return The field with backslashes and pipe characters escaped.
+     */
+    protected static String escapeFileField(String value) {
+        return value.replace("\\", "\\\\").replace("|", "\\|");
     }
 
     @Override

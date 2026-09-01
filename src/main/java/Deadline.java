@@ -7,7 +7,7 @@ public class Deadline extends Task {
 
     @Override
     public String toFileString() {
-        return "D | " + super.toFileString() + " | " + due_date;
+        return "D | " + super.toFileString() + " | " + escapeFileField(due_date);
     }
 
     @Override
