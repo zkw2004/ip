@@ -3,7 +3,7 @@ package friday.model;
 /**
  * A simple task without a date or time constraint.
  */
-public class ToDo extends Task{
+public class ToDo extends Task {
     /**
      * Creates an incomplete todo task.
      *
