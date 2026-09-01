@@ -1,14 +1,9 @@
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.ResolverStyle;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -18,7 +13,6 @@ import java.util.Scanner;
 public class Friday {
     private static final String LINE = "____________________________________________________________";
     private static final String NAME = "Friday";
-    private static final Path DATA_FILE = Path.of("data", "friday.txt");
     private static final DateTimeFormatter DATE_INPUT_FORMAT =
             DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH)
                     .withResolverStyle(ResolverStyle.STRICT);
@@ -47,10 +41,15 @@ public class Friday {
 
         printGreeting();
 
+        Storage storage = new Storage("data/friday.txt");
         TaskList tasks;
         boolean canSaveTasks;
         try {
-            tasks = new TaskList(loadTasks());
+            Storage.LoadResult loadResult = storage.load();
+            tasks = new TaskList(loadResult.getTasks());
+            for (String warning : loadResult.getWarnings()) {
+                printError(warning);
+            }
             canSaveTasks = true;
         } catch (IOException e) {
             tasks = new TaskList();
@@ -70,18 +69,18 @@ public class Friday {
                     printTaskList(tasks);
                 } else if (command.startsWith("delete ")) {
                     deleteTask(tasks, command.substring(7));
-                    saveTasksSafely(tasks, canSaveTasks);
+                    saveTasksSafely(storage, tasks, canSaveTasks);
                 } else if (command.startsWith("mark ")) {
                     updateTaskStatus(tasks, command.substring(5), true);
-                    saveTasksSafely(tasks, canSaveTasks);
+                    saveTasksSafely(storage, tasks, canSaveTasks);
                 } else if (command.startsWith("unmark ")) {
                     updateTaskStatus(tasks, command.substring(7), false);
-                    saveTasksSafely(tasks, canSaveTasks);
+                    saveTasksSafely(storage, tasks, canSaveTasks);
                 } else {
                     Task newTask = parseTask(command);
                     tasks.add(newTask);
                     printTaskAdded(newTask, tasks.size());
-                    saveTasksSafely(tasks, canSaveTasks);
+                    saveTasksSafely(storage, tasks, canSaveTasks);
                 }
             } catch (FridayException e) {
                 printError(e.getMessage());
@@ -92,201 +91,24 @@ public class Friday {
     }
 
     /**
-     * Loads all tasks from the data file. A missing file represents an empty
-     * task list, which is the expected situation on the first run.
-     *
-     * @return The tasks reconstructed from the data file.
-     * @throws IOException If an existing data file cannot be read.
-     */
-    private static ArrayList<Task> loadTasks() throws IOException {
-        ArrayList<Task> tasks = new ArrayList<>();
-        if (Files.notExists(DATA_FILE)) {
-            return tasks;
-        }
-
-        List<String> taskLines = Files.readAllLines(DATA_FILE, StandardCharsets.UTF_8);
-        for (int i = 0; i < taskLines.size(); i++) {
-            try {
-                tasks.add(parseSavedTask(taskLines.get(i)));
-            } catch (FridayException e) {
-                printError(String.format("I skipped corrupted task data on line %d: %s", i + 1, e.getMessage()));
-            }
-        }
-        return tasks;
-    }
-
-    /**
-     * Reconstructs one task from its pipe-separated file representation.
-     *
-     * @param taskLine One line read from the data file.
-     * @return The reconstructed task.
-     * @throws FridayException If the line does not follow the expected file format.
-     */
-    private static Task parseSavedTask(String taskLine) throws FridayException {
-        String[] fields = splitSavedTaskFields(taskLine);
-        if (fields.length < 3) {
-            throw new FridayException("expected a task type, status, and description.");
-        }
-
-        String taskType = fields[0];
-        String status = fields[1];
-        String description = fields[2];
-
-        int expectedFieldCount;
-        switch (taskType) {
-        case "T":
-            expectedFieldCount = 3;
-            break;
-        case "D":
-            expectedFieldCount = 4;
-            break;
-        case "E":
-            expectedFieldCount = 5;
-            break;
-        default:
-            throw new FridayException("unknown task type '" + taskType + "'.");
-        }
-
-        if (fields.length != expectedFieldCount) {
-            throw new FridayException("wrong number of fields for task type '" + taskType + "'.");
-        }
-        if (!status.equals("0") && !status.equals("1")) {
-            throw new FridayException("completion status must be 0 or 1.");
-        }
-        if (description.isBlank()) {
-            throw new FridayException("task description cannot be empty.");
-        }
-
-        Task task;
-        switch (taskType) {
-        case "T":
-            task = new ToDo(description);
-            break;
-        case "D":
-            if (fields[3].isBlank()) {
-                throw new FridayException("deadline date cannot be empty.");
-            }
-            task = new Deadline(description, parseSavedDate(fields[3]));
-            break;
-        case "E":
-            if (fields[3].isBlank() || fields[4].isBlank()) {
-                throw new FridayException("event start and end times cannot be empty.");
-            }
-            task = new Event(description, parseSavedDateTime(fields[3]), parseSavedDateTime(fields[4]));
-            break;
-        default:
-            throw new AssertionError("Task type was validated earlier.");
-        }
-
-        if (status.equals("1")) {
-            task.markAsDone();
-        }
-        return task;
-    }
-
-    /**
-     * Parses the ISO date used by saved deadline records.
-     *
-     * @param value The saved date text.
-     * @return The parsed date.
-     * @throws FridayException If the date is not valid ISO text.
-     */
-    private static LocalDate parseSavedDate(String value) throws FridayException {
-        try {
-            return LocalDate.parse(value, DateTimeFormatter.ISO_LOCAL_DATE);
-        } catch (DateTimeParseException e) {
-            throw new FridayException("deadline date is not a valid yyyy-MM-dd date.");
-        }
-    }
-
-    /**
-     * Parses the ISO date-time used by saved event records.
-     *
-     * @param value The saved date-time text.
-     * @return The parsed date-time.
-     * @throws FridayException If the date-time is not valid ISO text.
-     */
-    private static LocalDateTime parseSavedDateTime(String value) throws FridayException {
-        try {
-            return LocalDateTime.parse(value);
-        } catch (DateTimeParseException e) {
-            throw new FridayException("event time is not a valid saved date-time.");
-        }
-    }
-
-    /**
-     * Splits a saved task line at unescaped pipe separators and restores escaped
-     * pipe and backslash characters inside individual fields.
-     *
-     * @param taskLine One line read from the task file.
-     * @return The unescaped fields from the line.
-     */
-    private static String[] splitSavedTaskFields(String taskLine) {
-        List<String> fields = new ArrayList<>();
-        StringBuilder currentField = new StringBuilder();
-
-        for (int i = 0; i < taskLine.length(); i++) {
-            char currentCharacter = taskLine.charAt(i);
-            if (currentCharacter == '\\' && i + 1 < taskLine.length()) {
-                char nextCharacter = taskLine.charAt(i + 1);
-                if (nextCharacter == '\\' || nextCharacter == '|') {
-                    currentField.append(nextCharacter);
-                    i++;
-                    continue;
-                }
-            }
-
-            boolean isSeparator = currentCharacter == ' '
-                    && i + 2 < taskLine.length()
-                    && taskLine.charAt(i + 1) == '|'
-                    && taskLine.charAt(i + 2) == ' ';
-            if (isSeparator) {
-                fields.add(currentField.toString());
-                currentField.setLength(0);
-                i += 2;
-            } else {
-                currentField.append(currentCharacter);
-            }
-        }
-
-        fields.add(currentField.toString());
-        return fields.toArray(new String[0]);
-    }
-
-    /**
      * Attempts to save the task list and reports a friendly error if writing
      * fails, allowing the chatbot to continue running with its in-memory list.
      *
+     * @param storage Storage used to persist tasks.
      * @param tasks The complete task list to save.
      * @param canSaveTasks Whether loading succeeded and saving is safe for this session.
      */
-    private static void saveTasksSafely(TaskList tasks, boolean canSaveTasks) {
+    private static void saveTasksSafely(Storage storage, TaskList tasks, boolean canSaveTasks) {
         if (!canSaveTasks) {
             printError("I couldn't save your tasks because the existing data file could not be read.");
             return;
         }
 
         try {
-            saveTasks(tasks);
+            storage.save(tasks);
         } catch (IOException e) {
             printError("I couldn't save your tasks. Your latest changes might not be available next time.");
         }
-    }
-
-    /**
-     * Replaces the data file contents with the current task list. Each task is
-     * stored on its own line in a pipe-separated format that can be loaded later.
-     *
-     * @param tasks The complete task list to save.
-     * @throws IOException If the data directory or file cannot be written.
-     */
-    private static void saveTasks(TaskList tasks) throws IOException {
-        Files.createDirectories(DATA_FILE.getParent());
-        List<String> taskLines = new ArrayList<>();
-        for (Task task : tasks.asList()) {
-            taskLines.add(task.toFileString());
-        }
-        Files.write(DATA_FILE, taskLines, StandardCharsets.UTF_8);
     }
 
     private static void deleteTask(TaskList tasks, String taskNumberText) throws FridayException {
