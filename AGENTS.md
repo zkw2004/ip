@@ -38,3 +38,8 @@ Do not commit or push unless explicitly asked.
 
 After each code update, review `test/ui-test-plan.md` and update it if the change affects the console interaction being tested.
 After updating the code (and test plan, if needed), invoke the `test-ui` skill to run the UI test cases and surface any transcript mismatches immediately.
+
+## JUnit coverage workflow
+
+Maintain JUnit coverage for approximately the top 50% of methods, prioritizing complex, core, or critical business logic over trivial accessors.
+After each code change, update or add the relevant JUnit tests so the suite continues to meet this coverage target, and run `./gradlew test` to verify the tests.
