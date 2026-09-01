@@ -29,6 +29,46 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
+## Test Case: find-matching-tasks
+Aim:
+Verify that find displays tasks whose descriptions contain the requested keyword.
+
+Inputs:
+```text
+find book
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Here are the matching tasks in your list:
+ 1. [T][X] read book
+ 2. [D][ ] return book (by: Jun 06 2019)
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Initial Data:
+```text
+T | 1 | read book
+D | 0 | return book | 2019-06-06
+T | 0 | write notes
+```
+
 ## Test Case: reject-empty-todo
 Aim:
 Verify that the chatbot shows a friendly error when the user enters a todo without a description.

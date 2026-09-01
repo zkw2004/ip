@@ -25,6 +25,15 @@ public class Task {
     }
 
     /**
+     * Returns the task description.
+     *
+     * @return The human-readable task description.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
      * Returns the marker used in the task's display representation.
      *
      * @return {@code X} for a completed task, or a space otherwise.

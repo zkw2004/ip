@@ -3,6 +3,7 @@ package friday.model;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Encapsulates the collection of tasks managed by Friday.
@@ -74,5 +75,19 @@ public class TaskList {
      */
     public List<Task> asList() {
         return Collections.unmodifiableList(tasks);
+    }
+
+    /**
+     * Returns tasks whose descriptions contain the supplied keyword,
+     * ignoring letter case.
+     *
+     * @param keyword Text to search for in each task description.
+     * @return Matching tasks in their original list order.
+     */
+    public List<Task> find(String keyword) {
+        String normalizedKeyword = keyword.toLowerCase(Locale.ROOT);
+        return tasks.stream()
+                .filter(task -> task.getDescription().toLowerCase(Locale.ROOT).contains(normalizedKeyword))
+                .toList();
     }
 }
