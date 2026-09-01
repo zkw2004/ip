@@ -1,3 +1,11 @@
+package friday.command;
+
+import friday.exception.FridayException;
+import friday.model.Task;
+import friday.model.TaskList;
+import friday.storage.Storage;
+import friday.ui.Ui;
+
 /**
  * Marks one task as not completed.
  */

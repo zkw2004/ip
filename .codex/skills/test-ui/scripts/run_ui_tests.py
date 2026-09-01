@@ -17,7 +17,7 @@ PLAN_PATH = ROOT / "test" / "ui-test-plan.md"
 OUTPUT_PATH = ROOT / "_temp" / "ui-test-record.md"
 JAVA_SRC_DIR = ROOT / "src" / "main" / "java"
 DATA_FILE_PATH = ROOT / "data" / "friday.txt"
-MAIN_CLASS = "Friday"
+MAIN_CLASS = "friday.Friday"
 
 
 @dataclass
@@ -61,7 +61,7 @@ def parse_test_cases(plan_text: str) -> list[TestCase]:
 
 
 def compile_sources() -> None:
-    java_files = sorted(str(path) for path in JAVA_SRC_DIR.glob("*.java"))
+    java_files = sorted(str(path) for path in JAVA_SRC_DIR.rglob("*.java"))
     if not java_files:
         raise RuntimeError("No Java source files found in src/main/java.")
 

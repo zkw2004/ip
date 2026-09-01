@@ -1,3 +1,11 @@
+package friday.command;
+
+import friday.model.Task;
+import friday.model.TaskList;
+import friday.storage.Storage;
+import friday.ui.Ui;
+import friday.exception.FridayException;
+
 /**
  * Removes a task from the task list.
  */
