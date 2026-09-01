@@ -48,7 +48,14 @@ jar {
 }
 
 shadowJar {
-    archiveFileName = 'duke.jar'
+    archiveFileName = 'friday-all.jar'
+    manifest {
+        attributes 'Main-Class': application.mainClass.get()
+    }
+}
+
+tasks.named('build') {
+    dependsOn tasks.named('shadowJar')
 }
 
 run {
