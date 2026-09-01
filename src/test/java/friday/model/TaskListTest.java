@@ -13,6 +13,9 @@ import org.junit.jupiter.api.Test;
  * Tests the public operations and boundary behavior of {@link TaskList}.
  */
 class TaskListTest {
+    /**
+     * Verifies that the no-argument constructor starts with no tasks.
+     */
     @Test
     void defaultConstructor_createsEmptyTaskList() {
         TaskList tasks = new TaskList();
@@ -21,6 +24,9 @@ class TaskListTest {
         assertEquals(List.of(), tasks.asList());
     }
 
+    /**
+     * Verifies that constructing from a list copies its contents.
+     */
     @Test
     void listConstructor_copiesSuppliedTasks() {
         Task first = new ToDo("first");
@@ -33,6 +39,9 @@ class TaskListTest {
         assertSame(first, tasks.get(0));
     }
 
+    /**
+     * Verifies that added tasks retain insertion order and update the size.
+     */
     @Test
     void add_tasksAppendedInInsertionOrder_andSizeUpdated() {
         Task first = new ToDo("first");
@@ -47,6 +56,9 @@ class TaskListTest {
         assertSame(second, tasks.get(1));
     }
 
+    /**
+     * Verifies that a valid index returns the corresponding task.
+     */
     @Test
     void get_validIndex_returnsTaskAtThatIndex() {
         Task expected = new ToDo("expected");
@@ -55,6 +67,9 @@ class TaskListTest {
         assertSame(expected, tasks.get(1));
     }
 
+    /**
+     * Verifies that a negative lookup index is rejected.
+     */
     @Test
     void get_negativeIndex_throwsIndexOutOfBoundsException() {
         TaskList tasks = new TaskList(List.of(new ToDo("task")));
@@ -62,6 +77,9 @@ class TaskListTest {
         assertThrows(IndexOutOfBoundsException.class, () -> tasks.get(-1));
     }
 
+    /**
+     * Verifies that looking up the size index is rejected.
+     */
     @Test
     void getIndexAtSize_throwsIndexOutOfBoundsException() {
         TaskList tasks = new TaskList(List.of(new ToDo("task")));
@@ -69,6 +87,9 @@ class TaskListTest {
         assertThrows(IndexOutOfBoundsException.class, () -> tasks.get(tasks.size()));
     }
 
+    /**
+     * Verifies removal returns the task and closes the resulting gap.
+     */
     @Test
     void remove_validIndex_returnsRemovedTaskAndPreservesOrder() {
         Task first = new ToDo("first");
@@ -84,6 +105,9 @@ class TaskListTest {
         assertSame(last, tasks.get(1));
     }
 
+    /**
+     * Verifies that a negative removal index is rejected without mutation.
+     */
     @Test
     void remove_negativeIndex_throwsIndexOutOfBoundsException() {
         TaskList tasks = new TaskList(List.of(new ToDo("task")));
@@ -92,6 +116,9 @@ class TaskListTest {
         assertEquals(1, tasks.size());
     }
 
+    /**
+     * Verifies that removing at the size index is rejected without mutation.
+     */
     @Test
     void removeIndexAtSize_throwsIndexOutOfBoundsException() {
         TaskList tasks = new TaskList(List.of(new ToDo("task")));
@@ -100,6 +127,9 @@ class TaskListTest {
         assertEquals(1, tasks.size());
     }
 
+    /**
+     * Verifies that removing from an empty list is rejected.
+     */
     @Test
     void remove_emptyList_throwsIndexOutOfBoundsException() {
         TaskList tasks = new TaskList();
@@ -108,6 +138,9 @@ class TaskListTest {
         assertEquals(0, tasks.size());
     }
 
+    /**
+     * Verifies that size reflects both additions and removals.
+     */
     @Test
     void size_afterAddAndRemove_reportsCurrentNumberOfTasks() {
         TaskList tasks = new TaskList();
@@ -119,6 +152,9 @@ class TaskListTest {
         assertEquals(1, tasks.size());
     }
 
+    /**
+     * Verifies that the exposed list is read-only but remains a live view.
+     */
     @Test
     void asList_returnsReadOnlyView_thatReflectsTaskListChanges() {
         Task first = new ToDo("first");

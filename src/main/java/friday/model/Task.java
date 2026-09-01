@@ -1,19 +1,48 @@
 package friday.model;
 
+/**
+ * Base type for tasks stored and displayed by Friday.
+ */
 public class Task {
+    /**
+     * Human-readable task description.
+     */
     protected String description;
+
+    /**
+     * Whether this task has been completed.
+     */
     protected boolean isDone;
 
+    /**
+     * Creates an incomplete task with the supplied description.
+     *
+     * @param description Text describing the task.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
     }
+
+    /**
+     * Returns the marker used in the task's display representation.
+     *
+     * @return {@code X} for a completed task, or a space otherwise.
+     */
     public String getStatusIcon() {
         return (isDone ? "X" : " ");
     }
+
+    /**
+     * Marks this task as completed.
+     */
     public void markAsDone() {
         this.isDone = true;
     }
+
+    /**
+     * Marks this task as incomplete.
+     */
     public void unmarkAsDone() {
         this.isDone = false;
     }
@@ -39,6 +68,11 @@ public class Task {
         return value.replace("\\", "\\\\").replace("|", "\\|");
     }
 
+    /**
+     * Returns the user-facing representation of this task.
+     *
+     * @return The status icon and description.
+     */
     @Override
     public String toString() {
         return String.format("[%s] %s", getStatusIcon(), description);

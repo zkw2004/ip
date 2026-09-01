@@ -21,6 +21,14 @@ public class DeleteCommand extends Command {
         this.taskNumber = taskNumber;
     }
 
+    /**
+     * Removes the requested task and reports the updated list to the user.
+     *
+     * @param tasks Current task list to modify.
+     * @param ui UI used to display the confirmation.
+     * @param storage Storage available to the command; saving is coordinated by Friday.
+     * @throws FridayException If the task number is not valid.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) throws FridayException {
         Task task = getTask(tasks, taskNumber);
@@ -28,6 +36,11 @@ public class DeleteCommand extends Command {
         ui.showTaskDeleted(task, tasks.size());
     }
 
+    /**
+     * Indicates that executing this command changes persisted state.
+     *
+     * @return true because a task is removed.
+     */
     @Override
     public boolean changesTasks() {
         return true;

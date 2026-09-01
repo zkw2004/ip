@@ -20,12 +20,24 @@ public class AddCommand extends Command {
         this.task = task;
     }
 
+    /**
+     * Adds the stored task and reports the updated list to the user.
+     *
+     * @param tasks Current task list to modify.
+     * @param ui UI used to display the confirmation.
+     * @param storage Storage available to the command; saving is coordinated by Friday.
+     */
     @Override
     public void execute(TaskList tasks, Ui ui, Storage storage) {
         tasks.add(task);
         ui.showTaskAdded(task, tasks.size());
     }
 
+    /**
+     * Indicates that executing this command changes persisted state.
+     *
+     * @return true because a task is added.
+     */
     @Override
     public boolean changesTasks() {
         return true;

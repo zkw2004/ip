@@ -35,6 +35,12 @@ public class Parser {
                     .withResolverStyle(ResolverStyle.STRICT);
 
     /**
+     * Creates a parser for Friday commands.
+     */
+    public Parser() {
+    }
+
+    /**
      * Parses one line of user input.
      *
      * @param input Raw command entered by the user.

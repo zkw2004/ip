@@ -14,6 +14,12 @@ import friday.ui.Ui;
  */
 public class Friday {
     /**
+     * Creates the application coordinator.
+     */
+    public Friday() {
+    }
+
+    /**
      * Starts the chatbot and processes user commands until the user exits.
      *
      * @param args Command-line arguments, which are not used by this program.
