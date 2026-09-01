@@ -115,7 +115,7 @@ Hello! I'm Friday.
 What can I do for you?
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Use this format: deadline <description> /by <date>
+ OOPS!!! Use this format: deadline <description> /by <yyyy-MM-dd date>
 ____________________________________________________________
 ____________________________________________________________
  Bye. Hope to see you again soon!
@@ -226,7 +226,7 @@ Inputs:
 todo revise notes
 event /from Monday 2pm /to Monday 3pm
 list
-deadline submit report /by Friday
+deadline submit report /by 2019-10-15
 list
 bye
 ```
@@ -250,7 +250,7 @@ ____________________________________________________________
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Use this format: event <description> /from <start> /to <end>
+ OOPS!!! Use this format: event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
@@ -258,13 +258,13 @@ ____________________________________________________________
 ____________________________________________________________
 ____________________________________________________________
  Got it. I've added this task:
-   [D][ ] submit report (by: Friday)
+   [D][ ] submit report (by: Oct 15 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][ ] revise notes
- 2. [D][ ] submit report (by: Friday)
+ 2. [D][ ] submit report (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
  Bye. Hope to see you again soon!
@@ -328,8 +328,8 @@ Verify that deleting a valid task removes only that task and that the remaining 
 Inputs:
 ```text
 todo read book
-deadline return book /by June 6th
-event project meeting /from Aug 6th 2pm /to 4pm
+deadline return book /by 2019-06-06
+event project meeting /from 2019-08-06 14:00 /to 2019-08-06 16:00
 list
 delete 2
 list
@@ -356,29 +356,29 @@ ____________________________________________________________
 ____________________________________________________________
 ____________________________________________________________
  Got it. I've added this task:
-   [D][ ] return book (by: June 6th)
+   [D][ ] return book (by: Jun 06 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
  Got it. I've added this task:
-   [E][ ] project meeting (from: Aug 6th 2pmto: 4pm)
+   [E][ ] project meeting (from: Aug 06 2019 14:00 to: Aug 06 2019 16:00)
  Now you have 3 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][ ] read book
- 2. [D][ ] return book (by: June 6th)
- 3. [E][ ] project meeting (from: Aug 6th 2pmto: 4pm)
+ 2. [D][ ] return book (by: Jun 06 2019)
+ 3. [E][ ] project meeting (from: Aug 06 2019 14:00 to: Aug 06 2019 16:00)
 ____________________________________________________________
 ____________________________________________________________
  Noted. I've removed this task:
-   [D][ ] return book (by: June 6th)
+   [D][ ] return book (by: Jun 06 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][ ] read book
- 2. [E][ ] project meeting (from: Aug 6th 2pmto: 4pm)
+ 2. [E][ ] project meeting (from: Aug 06 2019 14:00 to: Aug 06 2019 16:00)
 ____________________________________________________________
 ____________________________________________________________
  Bye. Hope to see you again soon!
@@ -612,8 +612,8 @@ ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][X] read book
- 2. [D][ ] return book (by: June 6th)
- 3. [E][X] project meeting (from: Aug 6th 2pmto: 4pm)
+ 2. [D][ ] return book (by: Jun 06 2019)
+ 3. [E][X] project meeting (from: Aug 06 2019 14:00 to: Aug 06 2019 16:00)
 ____________________________________________________________
 ____________________________________________________________
  Bye. Hope to see you again soon!
@@ -623,8 +623,8 @@ ____________________________________________________________
 Initial Data:
 ```text
 T | 1 | read book
-D | 0 | return book | June 6th
-E | 1 | project meeting | Aug 6th 2pm | 4pm
+D | 0 | return book | 2019-06-06
+E | 1 | project meeting | 2019-08-06T14:00 | 2019-08-06T16:00
 ```
 
 ## Test Case: start-without-data-file
@@ -693,7 +693,7 @@ ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][X] valid todo
- 2. [D][ ] valid deadline (by: Sunday)
+ 2. [D][ ] valid deadline (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
  Bye. Hope to see you again soon!
@@ -706,7 +706,7 @@ T | 1 | valid todo
 D | 2 | bad status | Friday
 X | 0 | unknown task
 E | 0 | missing end | 2pm
-D | 0 | valid deadline | Sunday
+D | 0 | valid deadline | 2019-06-06
 ```
 
 ## Test Case: load-escaped-task-fields
@@ -744,4 +744,39 @@ ____________________________________________________________
 Initial Data:
 ```text
 T | 0 | compare A \| B in C:\\temp
+```
+
+## Test Case: reject-invalid-date-values
+Aim:
+Verify that impossible calendar dates and times are rejected instead of being silently normalized.
+
+Inputs:
+```text
+deadline return book /by 2019-02-29
+event project meeting /from 2019-02-30 14:00 /to 2019-03-01 16:00
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ OOPS!!! Use this format: deadline <description> /by <yyyy-MM-dd date>
+____________________________________________________________
+____________________________________________________________
+ OOPS!!! Use this format: event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
 ```

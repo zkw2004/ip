@@ -1,17 +1,24 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
+
 public class Deadline extends Task {
-    private String due_date;
-    public Deadline(String description, String due_date) {
+    private static final DateTimeFormatter DISPLAY_FORMAT =
+            DateTimeFormatter.ofPattern("MMM dd uuuu", Locale.ENGLISH);
+    private LocalDate dueDate;
+
+    public Deadline(String description, LocalDate dueDate) {
         super(description);
-        this.due_date = due_date;
+        this.dueDate = dueDate;
     }
 
     @Override
     public String toFileString() {
-        return "D | " + super.toFileString() + " | " + escapeFileField(due_date);
+        return "D | " + super.toFileString() + " | " + dueDate;
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + due_date + ")";
+        return "[D]" + super.toString() + " (by: " + dueDate.format(DISPLAY_FORMAT) + ")";
     }
 }
