@@ -2,8 +2,14 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 /**
@@ -13,6 +19,15 @@ public class Friday {
     private static final String LINE = "____________________________________________________________";
     private static final String NAME = "Friday";
     private static final Path DATA_FILE = Path.of("data", "friday.txt");
+    private static final DateTimeFormatter DATE_INPUT_FORMAT =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd", Locale.ENGLISH)
+                    .withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter EVENT_INPUT_FORMAT =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm", Locale.ENGLISH)
+                    .withResolverStyle(ResolverStyle.STRICT);
+    private static final DateTimeFormatter EVENT_COMPACT_INPUT_FORMAT =
+            DateTimeFormatter.ofPattern("uuuu-MM-dd HHmm", Locale.ENGLISH)
+                    .withResolverStyle(ResolverStyle.STRICT);
     private static final String BANNER = """
              _____    _     _
             |  ___| _(_) __| | __ _ _   _
@@ -151,13 +166,13 @@ public class Friday {
             if (fields[3].isBlank()) {
                 throw new FridayException("deadline date cannot be empty.");
             }
-            task = new Deadline(description, fields[3]);
+            task = new Deadline(description, parseSavedDate(fields[3]));
             break;
         case "E":
             if (fields[3].isBlank() || fields[4].isBlank()) {
                 throw new FridayException("event start and end times cannot be empty.");
             }
-            task = new Event(description, fields[3], fields[4]);
+            task = new Event(description, parseSavedDateTime(fields[3]), parseSavedDateTime(fields[4]));
             break;
         default:
             throw new AssertionError("Task type was validated earlier.");
@@ -167,6 +182,36 @@ public class Friday {
             task.markAsDone();
         }
         return task;
+    }
+
+    /**
+     * Parses the ISO date used by saved deadline records.
+     *
+     * @param value The saved date text.
+     * @return The parsed date.
+     * @throws FridayException If the date is not valid ISO text.
+     */
+    private static LocalDate parseSavedDate(String value) throws FridayException {
+        try {
+            return LocalDate.parse(value, DateTimeFormatter.ISO_LOCAL_DATE);
+        } catch (DateTimeParseException e) {
+            throw new FridayException("deadline date is not a valid yyyy-MM-dd date.");
+        }
+    }
+
+    /**
+     * Parses the ISO date-time used by saved event records.
+     *
+     * @param value The saved date-time text.
+     * @return The parsed date-time.
+     * @throws FridayException If the date-time is not valid ISO text.
+     */
+    private static LocalDateTime parseSavedDateTime(String value) throws FridayException {
+        try {
+            return LocalDateTime.parse(value);
+        } catch (DateTimeParseException e) {
+            throw new FridayException("event time is not a valid saved date-time.");
+        }
     }
 
     /**
@@ -386,7 +431,7 @@ public class Friday {
         String[] parts = details.split(" /by ", 2);
 
         if (parts.length < 2) {
-            throw new FridayException("Use this format: deadline <description> /by <date>");
+            throw new FridayException("Use this format: deadline <description> /by <yyyy-MM-dd date>");
         }
 
         String description = parts[0].trim();
@@ -396,10 +441,14 @@ public class Friday {
             throw new FridayException("The description of a deadline cannot be empty.");
         }
         if (by.isEmpty()) {
-            throw new FridayException("Use this format: deadline <description> /by <date>");
+            throw new FridayException("Use this format: deadline <description> /by <yyyy-MM-dd date>");
         }
 
-        return new Deadline(description, by);
+        try {
+            return new Deadline(description, LocalDate.parse(by, DATE_INPUT_FORMAT));
+        } catch (DateTimeParseException e) {
+            throw new FridayException("Use this format: deadline <description> /by <yyyy-MM-dd date>");
+        }
     }
 
     /**
@@ -414,27 +463,51 @@ public class Friday {
         String[] firstSplit = details.split(" /from ", 2);
 
         if (firstSplit.length < 2) {
-            throw new FridayException("Use this format: event <description> /from <start> /to <end>");
+            throw new FridayException("Use this format: event <description> /from <yyyy-MM-dd HH:mm> "
+                    + "/to <yyyy-MM-dd HH:mm>");
         }
 
         String description = firstSplit[0].trim();
         String[] secondSplit = firstSplit[1].split(" /to ", 2);
 
         if (secondSplit.length < 2) {
-            throw new FridayException("Use this format: event <description> /from <start> /to <end>");
+            throw new FridayException("Use this format: event <description> /from <yyyy-MM-dd HH:mm> "
+                    + "/to <yyyy-MM-dd HH:mm>");
         }
 
-        String from = secondSplit[0].trim();
-        String to = secondSplit[1].trim();
+        String fromText = secondSplit[0].trim();
+        String toText = secondSplit[1].trim();
 
         if (description.isEmpty()) {
             throw new FridayException("The description of an event cannot be empty.");
         }
-        if (from.isEmpty() || to.isEmpty()) {
-            throw new FridayException("Use this format: event <description> /from <start> /to <end>");
+        if (fromText.isEmpty() || toText.isEmpty()) {
+            throw new FridayException("Use this format: event <description> /from <yyyy-MM-dd HH:mm> "
+                    + "/to <yyyy-MM-dd HH:mm>");
         }
 
-        return new Event(description, from, to);
+        return new Event(description, parseEventDateTime(fromText), parseEventDateTime(toText));
+    }
+
+    /**
+     * Parses an event date-time in the documented format, also accepting the
+     * compact 24-hour form without a colon.
+     *
+     * @param value The user-supplied date-time text.
+     * @return The parsed date-time.
+     * @throws FridayException If neither supported format matches.
+     */
+    private static LocalDateTime parseEventDateTime(String value) throws FridayException {
+        try {
+            return LocalDateTime.parse(value, EVENT_INPUT_FORMAT);
+        } catch (DateTimeParseException firstFailure) {
+            try {
+                return LocalDateTime.parse(value, EVENT_COMPACT_INPUT_FORMAT);
+            } catch (DateTimeParseException secondFailure) {
+                throw new FridayException("Use this format: event <description> /from <yyyy-MM-dd HH:mm> "
+                        + "/to <yyyy-MM-dd HH:mm>");
+            }
+        }
     }
 
     /**
