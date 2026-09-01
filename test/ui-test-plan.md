@@ -547,3 +547,201 @@ ____________________________________________________________
  Bye. Hope to see you again soon!
 ____________________________________________________________
 ```
+
+## Test Case: save-task-list-after-changes
+Aim:
+Exercise successful add and mark changes so the resulting data file can be checked for the latest task state.
+
+Inputs:
+```text
+todo read book
+mark 1
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Got it. I've added this task:
+   [T][ ] read book
+ Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+ Nice! I've marked this task as done:
+ [T][X] read book
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+## Test Case: load-saved-task-list
+Aim:
+Verify that todos, deadlines, and events are loaded with their saved completion statuses when Friday starts.
+
+Inputs:
+```text
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1. [T][X] read book
+ 2. [D][ ] return book (by: June 6th)
+ 3. [E][X] project meeting (from: Aug 6th 2pmto: 4pm)
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Initial Data:
+```text
+T | 1 | read book
+D | 0 | return book | June 6th
+E | 1 | project meeting | Aug 6th 2pm | 4pm
+```
+
+## Test Case: start-without-data-file
+Aim:
+Verify that Friday starts with an empty task list when the data file and its folder do not exist yet.
+
+Inputs:
+```text
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+## Test Case: skip-corrupted-task-data
+Aim:
+Verify that Friday skips malformed saved records, explains each problem, and still loads valid records.
+
+Inputs:
+```text
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ OOPS!!! I skipped corrupted task data on line 2: completion status must be 0 or 1.
+____________________________________________________________
+____________________________________________________________
+ OOPS!!! I skipped corrupted task data on line 3: unknown task type 'X'.
+____________________________________________________________
+____________________________________________________________
+ OOPS!!! I skipped corrupted task data on line 4: wrong number of fields for task type 'E'.
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1. [T][X] valid todo
+ 2. [D][ ] valid deadline (by: Sunday)
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Initial Data:
+```text
+T | 1 | valid todo
+D | 2 | bad status | Friday
+X | 0 | unknown task
+E | 0 | missing end | 2pm
+D | 0 | valid deadline | Sunday
+```
+
+## Test Case: load-escaped-task-fields
+Aim:
+Verify that pipe and backslash characters inside saved task fields are not mistaken for field separators.
+
+Inputs:
+```text
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1. [T][ ] compare A | B in C:\temp
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+Initial Data:
+```text
+T | 0 | compare A \| B in C:\\temp
+```
