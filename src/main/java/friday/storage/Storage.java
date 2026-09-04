@@ -129,17 +129,17 @@ public class Storage {
 
         int expectedFieldCount;
         switch (taskType) {
-        case "T":
-            expectedFieldCount = 3;
-            break;
-        case "D":
-            expectedFieldCount = 4;
-            break;
-        case "E":
-            expectedFieldCount = 5;
-            break;
-        default:
-            throw new FridayException("unknown task type '" + taskType + "'.");
+            case "T":
+                expectedFieldCount = 3;
+                break;
+            case "D":
+                expectedFieldCount = 4;
+                break;
+            case "E":
+                expectedFieldCount = 5;
+                break;
+            default:
+                throw new FridayException("unknown task type '" + taskType + "'.");
         }
 
         if (fields.length != expectedFieldCount) {
@@ -154,23 +154,23 @@ public class Storage {
 
         Task task;
         switch (taskType) {
-        case "T":
-            task = new ToDo(description);
-            break;
-        case "D":
-            if (fields[3].isBlank()) {
-                throw new FridayException("deadline date cannot be empty.");
-            }
-            task = new Deadline(description, parseSavedDate(fields[3]));
-            break;
-        case "E":
-            if (fields[3].isBlank() || fields[4].isBlank()) {
-                throw new FridayException("event start and end times cannot be empty.");
-            }
-            task = new Event(description, parseSavedDateTime(fields[3]), parseSavedDateTime(fields[4]));
-            break;
-        default:
-            throw new AssertionError("Task type was validated earlier.");
+            case "T":
+                task = new ToDo(description);
+                break;
+            case "D":
+                if (fields[3].isBlank()) {
+                    throw new FridayException("deadline date cannot be empty.");
+                }
+                task = new Deadline(description, parseSavedDate(fields[3]));
+                break;
+            case "E":
+                if (fields[3].isBlank() || fields[4].isBlank()) {
+                    throw new FridayException("event start and end times cannot be empty.");
+                }
+                task = new Event(description, parseSavedDateTime(fields[3]), parseSavedDateTime(fields[4]));
+                break;
+            default:
+                throw new AssertionError("Task type was validated earlier.");
         }
 
         if (status.equals("1")) {

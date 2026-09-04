@@ -106,8 +106,8 @@ class ParserTest {
      */
     @Test
     void parse_invalidDeadlineDate_throwsFridayException() {
-        FridayException exception = assertThrows(FridayException.class,
-                () -> parser.parse("deadline return book /by 2019-02-29"));
+        FridayException exception = assertThrows(FridayException.class, () ->
+                parser.parse("deadline return book /by 2019-02-29"));
 
         assertEquals("Use this format: deadline <description> /by <yyyy-MM-dd date>", exception.getMessage());
     }
@@ -117,8 +117,8 @@ class ParserTest {
      */
     @Test
     void parse_invalidEventDateTime_throwsFridayException() {
-        FridayException exception = assertThrows(FridayException.class,
-                () -> parser.parse("event meeting /from 2019-08-06 2500 /to 2019-08-06 2600"));
+        FridayException exception = assertThrows(FridayException.class, () ->
+                parser.parse("event meeting /from 2019-08-06 2500 /to 2019-08-06 2600"));
 
         assertEquals("Use this format: event <description> /from <yyyy-MM-dd HH:mm> "
                 + "/to <yyyy-MM-dd HH:mm>", exception.getMessage());
