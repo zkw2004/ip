@@ -1,5 +1,6 @@
 package friday.ui;
 
+import java.io.PrintStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,23 +26,35 @@ public class Ui {
             """;
 
     private final Scanner scanner;
+    private final PrintStream output;
 
     /**
      * Creates a UI backed by standard input and output.
      */
     public Ui() {
-        scanner = new Scanner(System.in);
+        this(new Scanner(System.in), System.out);
+    }
+
+    /**
+     * Creates a UI with explicit input and output streams.
+     *
+     * @param scanner Source used for console input.
+     * @param output Destination used for user-facing output.
+     */
+    public Ui(Scanner scanner, PrintStream output) {
+        this.scanner = scanner;
+        this.output = output;
     }
 
     /**
      * Prints the greeting shown at the start of every session.
      */
     public void showGreeting() {
-        System.out.println(LINE);
-        System.out.println(BANNER);
-        System.out.println("Hello! I'm " + NAME + ".");
-        System.out.println("What can I do for you?");
-        System.out.println(LINE);
+        output.println(LINE);
+        output.println(BANNER);
+        output.println("Hello! I'm " + NAME + ".");
+        output.println("What can I do for you?");
+        output.println(LINE);
     }
 
     /**
@@ -68,12 +81,12 @@ public class Ui {
      * @param tasks The task list to display.
      */
     public void showTaskList(TaskList tasks) {
-        System.out.println(LINE);
-        System.out.println(" Here are the tasks in your list:");
+        output.println(LINE);
+        output.println(" Here are the tasks in your list:");
         for (int i = 0; i < tasks.size(); i++) {
-            System.out.println(String.format(" %d. %s", i + 1, tasks.get(i)));
+            output.println(String.format(" %d. %s", i + 1, tasks.get(i)));
         }
-        System.out.println(LINE);
+        output.println(LINE);
     }
 
     /**
@@ -82,15 +95,15 @@ public class Ui {
      * @param matchingTasks Tasks selected by the find command.
      */
     public void showMatchingTasks(List<Task> matchingTasks) {
-        System.out.println(LINE);
-        System.out.println(" Here are the matching tasks in your list:");
+        output.println(LINE);
+        output.println(" Here are the matching tasks in your list:");
         for (int i = 0; i < matchingTasks.size(); i++) {
-            System.out.println(String.format(" %d. %s", i + 1, matchingTasks.get(i)));
+            output.println(String.format(" %d. %s", i + 1, matchingTasks.get(i)));
         }
         if (matchingTasks.isEmpty()) {
-            System.out.println(" No matching tasks found.");
+            output.println(" No matching tasks found.");
         }
-        System.out.println(LINE);
+        output.println(LINE);
     }
 
     /**
@@ -100,11 +113,11 @@ public class Ui {
      * @param taskCount The total number of tasks after the addition.
      */
     public void showTaskAdded(Task task, int taskCount) {
-        System.out.println(LINE);
-        System.out.println(" Got it. I've added this task:");
-        System.out.println("   " + task);
-        System.out.println(" Now you have " + taskCount + " tasks in the list.");
-        System.out.println(LINE);
+        output.println(LINE);
+        output.println(" Got it. I've added this task:");
+        output.println("   " + task);
+        output.println(" Now you have " + taskCount + " tasks in the list.");
+        output.println(LINE);
     }
 
     /**
@@ -114,11 +127,11 @@ public class Ui {
      * @param taskCount The number of tasks remaining.
      */
     public void showTaskDeleted(Task task, int taskCount) {
-        System.out.println(LINE);
-        System.out.println(" Noted. I've removed this task:");
-        System.out.println("   " + task);
-        System.out.println(" Now you have " + taskCount + " tasks in the list.");
-        System.out.println(LINE);
+        output.println(LINE);
+        output.println(" Noted. I've removed this task:");
+        output.println("   " + task);
+        output.println(" Now you have " + taskCount + " tasks in the list.");
+        output.println(LINE);
     }
 
     /**
@@ -128,14 +141,14 @@ public class Ui {
      * @param markDone Whether the task was marked done or unmarked.
      */
     public void showTaskStatus(Task task, boolean markDone) {
-        System.out.println(LINE);
+        output.println(LINE);
         if (markDone) {
-            System.out.println(" Nice! I've marked this task as done:");
+            output.println(" Nice! I've marked this task as done:");
         } else {
-            System.out.println(" OK, I've marked this task as not done yet:");
+            output.println(" OK, I've marked this task as not done yet:");
         }
-        System.out.println(" " + task);
-        System.out.println(LINE);
+        output.println(" " + task);
+        output.println(LINE);
     }
 
     /**
@@ -144,18 +157,18 @@ public class Ui {
      * @param message The message to display.
      */
     public void showError(String message) {
-        System.out.println(LINE);
-        System.out.println(" OOPS!!! " + message);
-        System.out.println(LINE);
+        output.println(LINE);
+        output.println(" OOPS!!! " + message);
+        output.println(LINE);
     }
 
     /**
      * Prints the farewell message before the chatbot exits.
      */
     public void showExitMessage() {
-        System.out.println(LINE);
-        System.out.println(" Bye. Hope to see you again soon!");
-        System.out.println(LINE);
+        output.println(LINE);
+        output.println(" Bye. Hope to see you again soon!");
+        output.println(LINE);
     }
 
     /**
@@ -163,5 +176,12 @@ public class Ui {
      */
     public void close() {
         scanner.close();
+    }
+
+    /**
+     * Flushes output so callers using a buffered stream can read the complete response.
+     */
+    public void flush() {
+        output.flush();
     }
 }
