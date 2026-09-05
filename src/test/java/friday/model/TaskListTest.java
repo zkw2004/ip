@@ -40,6 +40,21 @@ class TaskListTest {
     }
 
     /**
+     * Verifies that the varargs constructor preserves argument order.
+     */
+    @Test
+    void varargsConstructor_preservesArgumentOrder() {
+        Task first = new ToDo("first");
+        Task second = new ToDo("second");
+
+        TaskList tasks = new TaskList(first, second);
+
+        assertEquals(2, tasks.size());
+        assertSame(first, tasks.get(0));
+        assertSame(second, tasks.get(1));
+    }
+
+    /**
      * Verifies that added tasks retain insertion order and update the size.
      */
     @Test
