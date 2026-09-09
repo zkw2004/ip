@@ -30,24 +30,46 @@ public class Friday {
 
         Storage storage = new Storage("data/friday.txt");
         Parser parser = new Parser();
-        TaskList tasks;
-        boolean canSaveTasks;
+        SessionState session = loadSession(ui, storage);
+        processCommands(ui, parser, storage, session);
+        ui.close();
+    }
+
+    /**
+     * Loads the task list and determines whether changes can be persisted.
+     *
+     * @param ui UI used to report malformed or unreadable saved data.
+     * @param storage Storage used to load saved tasks.
+     * @return The loaded task list and its persistence state.
+     */
+    private static SessionState loadSession(Ui ui, Storage storage) {
         try {
             Storage.LoadResult loadResult = storage.load();
             // Storage.load() must always return a result when it completes normally.
             assert loadResult != null : "A successful load must provide a result.";
-            tasks = new TaskList(loadResult.getTasks());
+            TaskList tasks = new TaskList(loadResult.getTasks());
             for (String warning : loadResult.getWarnings()) {
                 ui.showError(warning);
             }
-            canSaveTasks = true;
+            return new SessionState(tasks, true);
         } catch (IOException e) {
-            tasks = new TaskList();
-            canSaveTasks = false;
             ui.showError("I couldn't read the saved tasks, so I've started with an empty list. "
                     + "Saving is disabled for this session to protect the existing data.");
+            return new SessionState(new TaskList(), false);
         }
+    }
 
+    /**
+     * Processes commands until input ends or an exit command is received.
+     *
+     * @param ui UI used to read commands and display responses.
+     * @param parser Parser used to convert input into commands.
+     * @param storage Storage used to persist task changes.
+     * @param session Current tasks and persistence state.
+     */
+    private static void processCommands(Ui ui, Parser parser, Storage storage, SessionState session) {
+        TaskList tasks = session.tasks();
+        boolean canSaveTasks = session.canSaveTasks();
         // The command loop must never start without a task list to operate on.
         assert tasks != null : "Tasks must be initialized before processing commands.";
 
@@ -71,8 +93,15 @@ public class Friday {
                 ui.showError(e.getMessage());
             }
         }
+    }
 
-        ui.close();
+    /**
+     * Stores the state needed while a Friday session is running.
+     *
+     * @param tasks Current task list.
+     * @param canSaveTasks Whether task changes can be persisted safely.
+     */
+    private record SessionState(TaskList tasks, boolean canSaveTasks) {
     }
 
     /**
