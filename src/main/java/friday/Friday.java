@@ -34,6 +34,8 @@ public class Friday {
         boolean canSaveTasks;
         try {
             Storage.LoadResult loadResult = storage.load();
+            // Storage.load() must always return a result when it completes normally.
+            assert loadResult != null : "A successful load must provide a result.";
             tasks = new TaskList(loadResult.getTasks());
             for (String warning : loadResult.getWarnings()) {
                 ui.showError(warning);
@@ -46,11 +48,18 @@ public class Friday {
                     + "Saving is disabled for this session to protect the existing data.");
         }
 
+        // The command loop must never start without a task list to operate on.
+        assert tasks != null : "Tasks must be initialized before processing commands.";
+
         while (ui.hasNextCommand()) {
             String fullCommand = ui.readCommand();
 
             try {
+                // Ui.readCommand() is expected to return a line whenever input is available.
+                assert fullCommand != null : "An available command must not be null.";
                 Command command = parser.parse(fullCommand);
+                // Parser.parse() either returns a command or throws FridayException.
+                assert command != null : "A valid input must produce a command.";
                 command.execute(tasks, ui, storage);
                 if (command.changesTasks()) {
                     saveTasksSafely(ui, storage, tasks, canSaveTasks);
@@ -76,6 +85,10 @@ public class Friday {
      * @param canSaveTasks Whether loading succeeded and saving is safe for this session.
      */
     private static void saveTasksSafely(Ui ui, Storage storage, TaskList tasks, boolean canSaveTasks) {
+        assert ui != null : "UI must be available when reporting save failures.";
+        assert storage != null : "Storage must be available when saving tasks.";
+        assert tasks != null : "Tasks must be available when saving.";
+
         if (!canSaveTasks) {
             ui.showError("I couldn't save your tasks because the existing data file could not be read.");
             return;
