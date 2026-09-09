@@ -17,6 +17,7 @@ PLAN_PATH = ROOT / "test" / "ui-test-plan.md"
 OUTPUT_PATH = ROOT / "_temp" / "ui-test-record.md"
 JAVA_SRC_DIR = ROOT / "src" / "main" / "java"
 DATA_FILE_PATH = ROOT / "data" / "friday.txt"
+ARCHIVE_FILE_PATH = ROOT / "data" / "archive.txt"
 MAIN_CLASS = "friday.Friday"
 
 
@@ -102,6 +103,7 @@ def run_case(test_case: TestCase) -> str:
 def prepare_data_file(test_case: TestCase) -> None:
     """Give each test case an isolated task data file."""
     DATA_FILE_PATH.unlink(missing_ok=True)
+    ARCHIVE_FILE_PATH.unlink(missing_ok=True)
     try:
         DATA_FILE_PATH.parent.rmdir()
     except OSError:
@@ -153,6 +155,7 @@ def main() -> int:
         return 1
 
     original_data = DATA_FILE_PATH.read_bytes() if DATA_FILE_PATH.exists() else None
+    original_archive_data = ARCHIVE_FILE_PATH.read_bytes() if ARCHIVE_FILE_PATH.exists() else None
     records: list[tuple[TestCase, str]] = []
     try:
         for test_case in test_cases:
@@ -180,6 +183,11 @@ def main() -> int:
         else:
             DATA_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
             DATA_FILE_PATH.write_bytes(original_data)
+        if original_archive_data is None:
+            ARCHIVE_FILE_PATH.unlink(missing_ok=True)
+        else:
+            ARCHIVE_FILE_PATH.parent.mkdir(parents=True, exist_ok=True)
+            ARCHIVE_FILE_PATH.write_bytes(original_archive_data)
 
     write_record(records)
     print(f"PASSED: {len(test_cases)} test case(s)")

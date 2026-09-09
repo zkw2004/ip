@@ -29,6 +29,99 @@ ____________________________________________________________
 ____________________________________________________________
 ```
 
+## Test Case: archive-and-restore-all-tasks
+Aim:
+Verify that archiving all tasks moves them to the archive and restoring all
+tasks returns them to the active list in archive order.
+
+Inputs:
+```text
+todo read book
+deadline return book /by 2026-12-31
+archive all
+list-archive
+unarchive all
+list
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ Got it. I've added this task:
+   [T][ ] read book
+ Now you have 1 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+ Got it. I've added this task:
+   [D][ ] return book (by: Dec 31 2026)
+ Now you have 2 tasks in the list.
+____________________________________________________________
+____________________________________________________________
+ Archived 2 tasks.
+ Your task list is now empty.
+____________________________________________________________
+____________________________________________________________
+ Here are your archived tasks:
+ 1. [T][ ] read book
+ 2. [D][ ] return book (by: Dec 31 2026)
+____________________________________________________________
+____________________________________________________________
+ Restored 2 tasks.
+ Your archive is now empty.
+____________________________________________________________
+____________________________________________________________
+ Here are the tasks in your list:
+ 1. [T][ ] read book
+ 2. [D][ ] return book (by: Dec 31 2026)
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
+## Test Case: archive-all-with-no-tasks
+Aim:
+Verify that archiving an empty active list reports a friendly message.
+
+Inputs:
+```text
+archive all
+bye
+```
+
+Expected Output:
+```text
+____________________________________________________________
+ _____    _     _
+|  ___| _(_) __| | __ _ _   _
+| |_ | '__| |/ _` |/ _` | | | |
+|  _|| |  | | (_| | | (_| | |_| |
+|_|  |_|  |_|\__,_|\__,_|\__, |
+                         |___/
+
+Hello! I'm Friday.
+What can I do for you?
+____________________________________________________________
+____________________________________________________________
+ There are no tasks to archive.
+____________________________________________________________
+____________________________________________________________
+ Bye. Hope to see you again soon!
+____________________________________________________________
+```
+
 ## Test Case: find-matching-tasks
 Aim:
 Verify that find displays tasks whose descriptions contain the requested keyword.

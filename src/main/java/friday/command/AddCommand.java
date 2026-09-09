@@ -28,7 +28,7 @@ public class AddCommand extends Command {
      * @param storage Storage available to the command; saving is coordinated by Friday.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage, Storage archiveStorage) {
         tasks.add(task);
         ui.showTaskAdded(task, tasks.size());
     }

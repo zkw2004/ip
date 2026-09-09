@@ -29,9 +29,12 @@ public class Friday {
         ui.showGreeting();
 
         Storage storage = new Storage("data/friday.txt");
+        Storage archiveStorage = new Storage("data/archive.txt");
         Parser parser = new Parser();
-        SessionState session = loadSession(ui, storage);
-        processCommands(ui, parser, storage, session);
+        SessionState session = loadSession(ui, storage, "saved tasks", "Saving is disabled for this session.");
+        SessionState archiveSession = loadSession(ui, archiveStorage, "archive",
+                "Archive commands are disabled for this session.");
+        processCommands(ui, parser, storage, archiveStorage, session, archiveSession);
         ui.close();
     }
 
@@ -39,10 +42,12 @@ public class Friday {
      * Loads the task list and determines whether changes can be persisted.
      *
      * @param ui UI used to report malformed or unreadable saved data.
-     * @param storage Storage used to load saved tasks.
+     * @param storage Storage used to load tasks.
+     * @param dataDescription Description of the data being loaded.
+     * @param disabledMessage Message displayed when persistence is disabled.
      * @return The loaded task list and its persistence state.
      */
-    private static SessionState loadSession(Ui ui, Storage storage) {
+    private static SessionState loadSession(Ui ui, Storage storage, String dataDescription, String disabledMessage) {
         try {
             Storage.LoadResult loadResult = storage.load();
             // Storage.load() must always return a result when it completes normally.
@@ -53,8 +58,8 @@ public class Friday {
             }
             return new SessionState(tasks, true);
         } catch (IOException e) {
-            ui.showError("I couldn't read the saved tasks, so I've started with an empty list. "
-                    + "Saving is disabled for this session to protect the existing data.");
+            ui.showError("I couldn't read the " + dataDescription + ", so I've started with an empty list. "
+                    + disabledMessage);
             return new SessionState(new TaskList(), false);
         }
     }
@@ -64,12 +69,17 @@ public class Friday {
      *
      * @param ui UI used to read commands and display responses.
      * @param parser Parser used to convert input into commands.
-     * @param storage Storage used to persist task changes.
-     * @param session Current tasks and persistence state.
+     * @param storage Storage used to persist active task changes.
+     * @param archiveStorage Storage used to persist archived task changes.
+     * @param session Current active tasks and persistence state.
+     * @param archiveSession Current archived tasks and persistence state.
      */
-    private static void processCommands(Ui ui, Parser parser, Storage storage, SessionState session) {
+    private static void processCommands(Ui ui, Parser parser, Storage storage, Storage archiveStorage,
+            SessionState session, SessionState archiveSession) {
         TaskList tasks = session.tasks();
+        TaskList archivedTasks = archiveSession.tasks();
         boolean canSaveTasks = session.canSaveTasks();
+        boolean canSaveArchivedTasks = archiveSession.canSaveTasks();
         // The command loop must never start without a task list to operate on.
         assert tasks != null : "Tasks must be initialized before processing commands.";
 
@@ -82,7 +92,9 @@ public class Friday {
                 Command command = parser.parse(fullCommand);
                 // Parser.parse() either returns a command or throws FridayException.
                 assert command != null : "A valid input must produce a command.";
-                command.execute(tasks, ui, storage);
+                Storage availableStorage = canSaveTasks ? storage : null;
+                Storage availableArchiveStorage = canSaveArchivedTasks ? archiveStorage : null;
+                command.execute(tasks, archivedTasks, ui, availableStorage, availableArchiveStorage);
                 if (command.changesTasks()) {
                     saveTasksSafely(ui, storage, tasks, canSaveTasks);
                 }

@@ -69,6 +69,16 @@ public class TaskList {
     }
 
     /**
+     * Replaces this list's contents with a copy of the supplied tasks.
+     *
+     * @param tasks Tasks that should replace the current list contents.
+     */
+    public void replaceWith(List<Task> tasks) {
+        this.tasks.clear();
+        this.tasks.addAll(tasks);
+    }
+
+    /**
      * Returns the number of tasks in this list.
      *
      * @return The task count.
