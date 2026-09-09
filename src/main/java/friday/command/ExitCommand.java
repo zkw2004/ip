@@ -22,7 +22,7 @@ public class ExitCommand extends Command {
      * @param storage Storage available to the command, which is unused.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) {
+    public void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage, Storage archiveStorage) {
         ui.showExitMessage();
     }
 

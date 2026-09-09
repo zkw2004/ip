@@ -22,12 +22,15 @@ public abstract class Command {
     /**
      * Executes this command against the current application state.
      *
-     * @param tasks Current task list.
+     * @param tasks Current active task list.
+     * @param archivedTasks Current archived task list.
      * @param ui UI used for user-facing responses.
-     * @param storage Storage available to commands that need persistence.
+     * @param storage Storage for active tasks.
+     * @param archiveStorage Storage for archived tasks.
      * @throws FridayException If the command cannot be completed.
      */
-    public abstract void execute(TaskList tasks, Ui ui, Storage storage) throws FridayException;
+    public abstract void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage,
+            Storage archiveStorage) throws FridayException;
 
     /**
      * Commands do not exit unless they override this default.

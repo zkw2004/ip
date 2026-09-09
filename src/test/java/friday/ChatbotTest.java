@@ -20,4 +20,16 @@ class ChatbotTest {
         assertTrue(response.contains("I've added this task"));
         assertTrue(response.contains("[T][ ] read book"));
     }
+
+    /**
+     * Verifies that archive commands are rejected by the in-memory JavaFX adapter.
+     */
+    @Test
+    void getResponse_archiveCommand_reportsConsoleOnlyMessage() {
+        Chatbot chatbot = new Chatbot();
+
+        String response = chatbot.getResponse("archive all");
+
+        assertTrue(response.contains("Archiving is available only in the console app."));
+    }
 }

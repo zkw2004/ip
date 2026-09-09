@@ -8,12 +8,15 @@ import java.time.format.ResolverStyle;
 import java.util.Locale;
 
 import friday.command.AddCommand;
+import friday.command.ArchiveCommand;
 import friday.command.Command;
 import friday.command.DeleteCommand;
 import friday.command.ExitCommand;
 import friday.command.FindCommand;
+import friday.command.ListArchiveCommand;
 import friday.command.ListCommand;
 import friday.command.MarkCommand;
+import friday.command.UnarchiveCommand;
 import friday.command.UnmarkCommand;
 import friday.exception.FridayException;
 import friday.model.Deadline;
@@ -53,6 +56,12 @@ public class Parser {
             return new ExitCommand();
         } else if (input.equals("list")) {
             return new ListCommand();
+        } else if (input.equals("list-archive")) {
+            return new ListArchiveCommand();
+        } else if (isCommandWord(input, "archive")) {
+            return parseArchive(input);
+        } else if (isCommandWord(input, "unarchive")) {
+            return parseUnarchive(input);
         } else if (input.equals("find") || input.startsWith("find ")) {
             return new FindCommand(parseFindKeyword(input));
         } else if (input.startsWith("delete ")) {
@@ -97,6 +106,46 @@ public class Parser {
             return Integer.parseInt(taskNumberText.trim());
         } catch (NumberFormatException e) {
             throw new FridayException("Please enter a valid task number.");
+        }
+    }
+
+    /**
+     * Parses an archive command for one task or all active tasks.
+     *
+     * @param input Full archive command.
+     * @return A command that archives one or all active tasks.
+     * @throws FridayException If the command syntax is invalid.
+     */
+    private static Command parseArchive(String input) throws FridayException {
+        String argument = input.substring("archive".length()).trim();
+        if (argument.equals("all")) {
+            return new ArchiveCommand();
+        }
+        if (argument.isEmpty() || argument.contains(" ")) {
+            throw new FridayException("Use this format: archive <task number> or archive all");
+        }
+        return new ArchiveCommand(parseTaskNumber(argument));
+    }
+
+    /**
+     * Parses an unarchive command for one task or all archived tasks.
+     *
+     * @param input Full unarchive command.
+     * @return A command that restores one or all archived tasks.
+     * @throws FridayException If the command syntax is invalid.
+     */
+    private static Command parseUnarchive(String input) throws FridayException {
+        String argument = input.substring("unarchive".length()).trim();
+        if (argument.equals("all")) {
+            return new UnarchiveCommand();
+        }
+        if (argument.isEmpty() || argument.contains(" ")) {
+            throw new FridayException("Use this format: unarchive <archive number> or unarchive all");
+        }
+        try {
+            return new UnarchiveCommand(Integer.parseInt(argument));
+        } catch (NumberFormatException e) {
+            throw new FridayException("Please enter a valid archived task number.");
         }
     }
 

@@ -30,7 +30,8 @@ public class UnmarkCommand extends Command {
      * @throws FridayException If the task number is not valid.
      */
     @Override
-    public void execute(TaskList tasks, Ui ui, Storage storage) throws FridayException {
+    public void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage,
+            Storage archiveStorage) throws FridayException {
         Task task = getTask(tasks, taskNumber);
         task.unmarkAsDone();
         ui.showTaskStatus(task, false);

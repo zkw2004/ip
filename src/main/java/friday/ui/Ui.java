@@ -90,6 +90,24 @@ public class Ui {
     }
 
     /**
+     * Prints all tasks currently stored in the archive.
+     *
+     * @param archivedTasks Archived tasks to display.
+     */
+    public void showArchivedTaskList(TaskList archivedTasks) {
+        output.println(LINE);
+        if (archivedTasks.size() == 0) {
+            output.println(" There are no archived tasks.");
+        } else {
+            output.println(" Here are your archived tasks:");
+            for (int i = 0; i < archivedTasks.size(); i++) {
+                output.println(String.format(" %d. %s", i + 1, archivedTasks.get(i)));
+            }
+        }
+        output.println(LINE);
+    }
+
+    /**
      * Prints tasks whose descriptions match a search keyword.
      *
      * @param matchingTasks Tasks selected by the find command.
@@ -131,6 +149,72 @@ public class Ui {
         output.println(" Noted. I've removed this task:");
         output.println("   " + task);
         output.println(" Now you have " + taskCount + " tasks in the list.");
+        output.println(LINE);
+    }
+
+    /**
+     * Prints confirmation that one task was moved to the archive.
+     *
+     * @param task Task moved to the archive.
+     */
+    public void showTaskArchived(Task task) {
+        output.println(LINE);
+        output.println(" Archived this task:");
+        output.println(" " + task);
+        output.println(LINE);
+    }
+
+    /**
+     * Prints confirmation that all active tasks were archived.
+     *
+     * @param taskCount Number of archived tasks.
+     */
+    public void showTasksArchived(int taskCount) {
+        output.println(LINE);
+        output.println(String.format(" Archived %d %s.", taskCount, taskCount == 1 ? "task" : "tasks"));
+        output.println(" Your task list is now empty.");
+        output.println(LINE);
+    }
+
+    /**
+     * Prints confirmation that one archived task was restored.
+     *
+     * @param task Task restored to the active list.
+     */
+    public void showTaskUnarchived(Task task) {
+        output.println(LINE);
+        output.println(" Restored this task:");
+        output.println(" " + task);
+        output.println(LINE);
+    }
+
+    /**
+     * Prints confirmation that all archived tasks were restored.
+     *
+     * @param taskCount Number of restored tasks.
+     */
+    public void showTasksUnarchived(int taskCount) {
+        output.println(LINE);
+        output.println(String.format(" Restored %d %s.", taskCount, taskCount == 1 ? "task" : "tasks"));
+        output.println(" Your archive is now empty.");
+        output.println(LINE);
+    }
+
+    /**
+     * Prints the response for an archive-all request with no active tasks.
+     */
+    public void showNoTasksToArchive() {
+        output.println(LINE);
+        output.println(" There are no tasks to archive.");
+        output.println(LINE);
+    }
+
+    /**
+     * Prints the response for an unarchive-all request with no archived tasks.
+     */
+    public void showNoArchivedTasksToRestore() {
+        output.println(LINE);
+        output.println(" There are no archived tasks to restore.");
         output.println(LINE);
     }
 

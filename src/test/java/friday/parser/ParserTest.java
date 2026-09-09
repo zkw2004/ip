@@ -7,11 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import friday.command.AddCommand;
+import friday.command.ArchiveCommand;
 import friday.command.DeleteCommand;
 import friday.command.ExitCommand;
 import friday.command.FindCommand;
+import friday.command.ListArchiveCommand;
 import friday.command.ListCommand;
 import friday.command.MarkCommand;
+import friday.command.UnarchiveCommand;
 import friday.command.UnmarkCommand;
 import friday.exception.FridayException;
 
@@ -45,6 +48,11 @@ class ParserTest {
         assertInstanceOf(DeleteCommand.class, parser.parse("delete 2"));
         assertInstanceOf(MarkCommand.class, parser.parse("mark 2"));
         assertInstanceOf(UnmarkCommand.class, parser.parse("unmark 2"));
+        assertInstanceOf(ArchiveCommand.class, parser.parse("archive 2"));
+        assertInstanceOf(ArchiveCommand.class, parser.parse("archive all"));
+        assertInstanceOf(ListArchiveCommand.class, parser.parse("list-archive"));
+        assertInstanceOf(UnarchiveCommand.class, parser.parse("unarchive 2"));
+        assertInstanceOf(UnarchiveCommand.class, parser.parse("unarchive all"));
         assertInstanceOf(FindCommand.class, parser.parse("find book"));
         assertInstanceOf(AddCommand.class, parser.parse("todo read book"));
         assertInstanceOf(AddCommand.class, parser.parse("deadline return book /by 2019-06-06"));
@@ -89,6 +97,28 @@ class ParserTest {
         FridayException exception = assertThrows(FridayException.class, () -> parser.parse("delete two"));
 
         assertEquals("Please enter a valid task number.", exception.getMessage());
+    }
+
+    /**
+     * Verifies that archive commands require one task number or the all argument.
+     */
+    @Test
+    void parse_invalidArchiveSyntax_throwsFridayException() {
+        FridayException missingArgument = assertThrows(FridayException.class, () -> parser.parse("archive"));
+        FridayException extraArguments = assertThrows(FridayException.class, () -> parser.parse("archive 1 2"));
+
+        assertEquals("Use this format: archive <task number> or archive all", missingArgument.getMessage());
+        assertEquals("Use this format: archive <task number> or archive all", extraArguments.getMessage());
+    }
+
+    /**
+     * Verifies that unarchive commands distinguish invalid archive numbers.
+     */
+    @Test
+    void parse_invalidUnarchiveNumber_throwsFridayException() {
+        FridayException exception = assertThrows(FridayException.class, () -> parser.parse("unarchive two"));
+
+        assertEquals("Please enter a valid archived task number.", exception.getMessage());
     }
 
     /**

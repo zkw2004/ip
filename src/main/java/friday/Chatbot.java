@@ -21,6 +21,7 @@ import friday.ui.Ui;
 public class Chatbot {
     private final Parser parser;
     private final TaskList tasks;
+    private final TaskList archivedTasks;
     private final ByteArrayOutputStream responseBuffer;
     private final Ui responseUi;
 
@@ -30,6 +31,7 @@ public class Chatbot {
     public Chatbot() {
         parser = new Parser();
         tasks = new TaskList();
+        archivedTasks = new TaskList();
         responseBuffer = new ByteArrayOutputStream();
         PrintStream responseStream = new PrintStream(responseBuffer, true, StandardCharsets.UTF_8);
         responseUi = new Ui(new Scanner(""), responseStream);
@@ -45,7 +47,7 @@ public class Chatbot {
         responseBuffer.reset();
         try {
             Command command = parser.parse(input);
-            command.execute(tasks, responseUi, null);
+            command.execute(tasks, archivedTasks, responseUi, null, null);
         } catch (FridayException e) {
             responseUi.showError(e.getMessage());
         }
