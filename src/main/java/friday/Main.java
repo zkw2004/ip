@@ -24,9 +24,12 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
         try {
             Scene scene = new Scene(loader.load());
+            scene.getStylesheets().add(Main.class.getResource("/view/friday.css").toExternalForm());
             MainWindow controller = loader.getController();
             controller.setChatbot(new Chatbot());
-            stage.setTitle("Friday");
+            stage.setTitle("FRIDAY");
+            stage.setMinWidth(360);
+            stage.setMinHeight(420);
             stage.setScene(scene);
             stage.show();
         } catch (IOException e) {

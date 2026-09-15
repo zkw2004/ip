@@ -8,21 +8,20 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 /**
  * Coordinates the controls in {@code MainWindow.fxml} with a chatbot.
  */
-public class MainWindow extends AnchorPane {
+public class MainWindow {
     @FXML
-    private ScrollPane scrollPane;
+    private ScrollPane chatScroll;
 
     @FXML
     private VBox dialogContainer;
 
     @FXML
-    private TextField userInput;
+    private TextField commandField;
 
     @FXML
     private Button sendButton;
@@ -32,7 +31,7 @@ public class MainWindow extends AnchorPane {
     private Chatbot chatbot;
 
     /**
-     * Creates the controller and loads the two avatars from the classpath.
+     * Creates the controller and loads the fixed conversation profile images.
      */
     public MainWindow() {
         userImage = loadImage("/images/tonystark.jpeg");
@@ -54,23 +53,28 @@ public class MainWindow extends AnchorPane {
     @FXML
     private void initialize() {
         dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight) ->
-                Platform.runLater(() -> scrollPane.setVvalue(1.0)));
+                Platform.runLater(() -> chatScroll.setVvalue(1.0)));
     }
 
     /**
      * Sends the current input to the chatbot and appends both messages.
      */
     @FXML
-    private void handleUserInput() {
-        String input = userInput.getText();
+    private void handleSend() {
+        String input = commandField.getText();
         if (input == null || input.isBlank()) {
             return;
         }
 
-        String response = chatbot.getResponse(input);
-        dialogContainer.getChildren().add(DialogBox.getUserDialog(input, userImage));
-        dialogContainer.getChildren().add(DialogBox.getChatbotDialog(response, chatbotImage));
-        userInput.clear();
+        Chatbot.Response response = chatbot.getResponseResult(input);
+        DialogBox userDialog = DialogBox.getUserDialog(input, userImage);
+        DialogBox replyDialog = response.isError()
+                ? DialogBox.getErrorDialog(response.text(), chatbotImage)
+                : DialogBox.getChatbotDialog(response.text(), chatbotImage);
+        userDialog.bindMessageWidth(chatScroll.widthProperty());
+        replyDialog.bindMessageWidth(chatScroll.widthProperty());
+        dialogContainer.getChildren().addAll(userDialog, replyDialog);
+        commandField.clear();
     }
 
     /**
