@@ -163,4 +163,53 @@ class ParserTest {
         assertThrows(FridayException.class, () -> parser.parse("deadlinereport /by Sunday"));
         assertThrows(FridayException.class, () -> parser.parse("eventmeeting /from 2019-08-06 1400 /to 1600"));
     }
+
+    /**
+     * Verifies that harmless outer and repeated whitespace is normalized.
+     */
+    @Test
+    void parse_whitespaceAroundCommand_isNormalized() throws FridayException {
+        assertInstanceOf(ListCommand.class, parser.parse("  list  "));
+        assertInstanceOf(AddCommand.class, parser.parse("todo   read   book"));
+    }
+
+    /**
+     * Verifies that missing input is reported as a user-correctable error.
+     */
+    @Test
+    void parse_nullOrBlankInput_throwsFridayException() {
+        assertEquals("Please enter a command.",
+                assertThrows(FridayException.class, () -> parser.parse(null)).getMessage());
+        assertEquals("Please enter a command.",
+                assertThrows(FridayException.class, () -> parser.parse(" \t ")).getMessage());
+    }
+
+    /**
+     * Verifies that non-positive and overflowing task numbers are rejected.
+     */
+    @Test
+    void parse_invalidTaskNumberRange_throwsFridayException() {
+        assertThrows(FridayException.class, () -> parser.parse("delete 0"));
+        assertThrows(FridayException.class, () -> parser.parse("delete 999999999999999999999"));
+    }
+
+    /**
+     * Verifies that an event cannot end before or at its start time.
+     */
+    @Test
+    void parse_eventWithInvalidTimeRange_throwsFridayException() {
+        FridayException exception = assertThrows(FridayException.class, () -> parser.parse(
+                "event meeting /from 2019-08-06 14:00 /to 2019-08-06 14:00"));
+
+        assertEquals("The event must start before it ends.", exception.getMessage());
+    }
+
+    /**
+     * Verifies that repeated deadline parameters are rejected.
+     */
+    @Test
+    void parse_repeatedDeadlineParameter_throwsFridayException() {
+        assertThrows(FridayException.class, () -> parser.parse(
+                "deadline report /by 2019-08-06 /by 2019-08-07"));
+    }
 }

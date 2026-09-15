@@ -82,4 +82,23 @@ class StorageTest {
         assertTrue(result.getWarnings().get(0).contains("line 2"));
         assertTrue(result.getWarnings().get(1).contains("line 3"));
     }
+
+    /**
+     * Verifies that duplicate and chronologically invalid records are skipped safely.
+     */
+    @Test
+    void load_duplicateAndInvalidEvent_recordsAreSkipped() throws Exception {
+        Path dataFile = temporaryDirectory.resolve("friday.txt");
+        Files.writeString(dataFile, String.join("\n",
+                "T | 0 | duplicate",
+                "T | 1 | duplicate",
+                "E | 0 | invalid range | 2019-08-06T16:00 | 2019-08-06T14:00"));
+
+        Storage.LoadResult result = new Storage(dataFile.toString()).load();
+
+        assertEquals(1, result.getTasks().size());
+        assertEquals(2, result.getWarnings().size());
+        assertTrue(result.getWarnings().get(0).contains("duplicate"));
+        assertTrue(result.getWarnings().get(1).contains("line 3"));
+    }
 }

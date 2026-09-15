@@ -27,6 +27,20 @@ public class Event extends Task {
     }
 
     /**
+     * Checks whether another event has the same description and date-times.
+     *
+     * @param other Task to compare with this event.
+     * @return Whether both events have identical details.
+     */
+    @Override
+    public boolean hasSameDetails(Task other) {
+        return other instanceof Event event
+                && super.hasSameDetails(other)
+                && from.equals(event.from)
+                && to.equals(event.to);
+    }
+
+    /**
      * Serializes this event for storage.
      *
      * @return A type marker followed by task fields and ISO date-times.

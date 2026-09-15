@@ -3,6 +3,7 @@ package friday.storage;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -33,7 +34,14 @@ public class Storage {
      * @param filePath File path used for persistence.
      */
     public Storage(String filePath) {
-        this.dataFile = Path.of(filePath);
+        if (filePath == null || filePath.isBlank()) {
+            throw new IllegalArgumentException("The task data file path cannot be empty.");
+        }
+        try {
+            this.dataFile = Path.of(filePath);
+        } catch (InvalidPathException e) {
+            throw new IllegalArgumentException("The task data file path is invalid.", e);
+        }
     }
 
     /**
@@ -49,10 +57,20 @@ public class Storage {
             return new LoadResult(tasks, warnings);
         }
 
-        List<String> taskLines = Files.readAllLines(dataFile, StandardCharsets.UTF_8);
+        List<String> taskLines;
+        try {
+            taskLines = Files.readAllLines(dataFile, StandardCharsets.UTF_8);
+        } catch (SecurityException e) {
+            throw new IOException("Access to the task data file was denied.", e);
+        }
         for (int i = 0; i < taskLines.size(); i++) {
             try {
-                tasks.add(parseSavedTask(taskLines.get(i)));
+                Task task = parseSavedTask(taskLines.get(i));
+                if (tasks.stream().anyMatch(existing -> existing.hasSameDetails(task))) {
+                    warnings.add(String.format("I skipped duplicate task data on line %d.", i + 1));
+                } else {
+                    tasks.add(task);
+                }
             } catch (FridayException e) {
                 warnings.add(String.format("I skipped corrupted task data on line %d: %s", i + 1, e.getMessage()));
             }
@@ -68,14 +86,18 @@ public class Storage {
      */
     public void save(TaskList tasks) throws IOException {
         Path parent = dataFile.getParent();
-        if (parent != null) {
-            Files.createDirectories(parent);
-        }
+        try {
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
 
-        List<String> taskLines = tasks.asList().stream()
-                .map(Task::toFileString)
-                .toList();
-        Files.write(dataFile, taskLines, StandardCharsets.UTF_8);
+            List<String> taskLines = tasks.asList().stream()
+                    .map(Task::toFileString)
+                    .toList();
+            Files.write(dataFile, taskLines, StandardCharsets.UTF_8);
+        } catch (SecurityException e) {
+            throw new IOException("Access to the task data file was denied.", e);
+        }
     }
 
     /**
@@ -166,7 +188,12 @@ public class Storage {
                 if (fields[3].isBlank() || fields[4].isBlank()) {
                     throw new FridayException("event start and end times cannot be empty.");
                 }
-                task = new Event(description, parseSavedDateTime(fields[3]), parseSavedDateTime(fields[4]));
+                LocalDateTime from = parseSavedDateTime(fields[3]);
+                LocalDateTime to = parseSavedDateTime(fields[4]);
+                if (!from.isBefore(to)) {
+                    throw new FridayException("event start must be before event end.");
+                }
+                task = new Event(description, from, to);
                 break;
             default:
                 throw new AssertionError("Task type was validated earlier.");

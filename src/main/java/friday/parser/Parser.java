@@ -52,27 +52,31 @@ public class Parser {
      * @throws FridayException If the input is not a supported valid command.
      */
     public Command parse(String input) throws FridayException {
-        if (input.equals("bye")) {
+        if (input == null || input.isBlank()) {
+            throw new FridayException("Please enter a command.");
+        }
+        String command = normalizeWhitespace(input);
+        if (command.equals("bye")) {
             return new ExitCommand();
-        } else if (input.equals("list")) {
+        } else if (command.equals("list")) {
             return new ListCommand();
-        } else if (input.equals("list-archive")) {
+        } else if (command.equals("list-archive")) {
             return new ListArchiveCommand();
-        } else if (isCommandWord(input, "archive")) {
-            return parseArchive(input);
-        } else if (isCommandWord(input, "unarchive")) {
-            return parseUnarchive(input);
-        } else if (input.equals("find") || input.startsWith("find ")) {
-            return new FindCommand(parseFindKeyword(input));
-        } else if (input.startsWith("delete ")) {
-            return new DeleteCommand(parseTaskNumber(input.substring(7)));
-        } else if (input.startsWith("mark ")) {
-            return new MarkCommand(parseTaskNumber(input.substring(5)));
-        } else if (input.startsWith("unmark ")) {
-            return new UnmarkCommand(parseTaskNumber(input.substring(7)));
+        } else if (isCommandWord(command, "archive")) {
+            return parseArchive(command);
+        } else if (isCommandWord(command, "unarchive")) {
+            return parseUnarchive(command);
+        } else if (command.equals("find") || command.startsWith("find ")) {
+            return new FindCommand(parseFindKeyword(command));
+        } else if (command.startsWith("delete ")) {
+            return new DeleteCommand(parseTaskNumber(command.substring(7)));
+        } else if (command.startsWith("mark ")) {
+            return new MarkCommand(parseTaskNumber(command.substring(5)));
+        } else if (command.startsWith("unmark ")) {
+            return new UnmarkCommand(parseTaskNumber(command.substring(7)));
         }
 
-        return new AddCommand(parseTask(input));
+        return new AddCommand(parseTask(command));
     }
 
     /**
@@ -102,8 +106,11 @@ public class Parser {
      * @throws FridayException If the argument is not an integer.
      */
     private static int parseTaskNumber(String taskNumberText) throws FridayException {
+        if (!taskNumberText.matches("[1-9][0-9]*")) {
+            throw new FridayException("Please enter a valid task number.");
+        }
         try {
-            return Integer.parseInt(taskNumberText.trim());
+            return Integer.parseInt(taskNumberText);
         } catch (NumberFormatException e) {
             throw new FridayException("Please enter a valid task number.");
         }
@@ -121,7 +128,7 @@ public class Parser {
         if (argument.equals("all")) {
             return new ArchiveCommand();
         }
-        if (argument.isEmpty() || argument.contains(" ")) {
+        if (argument.isEmpty() || argument.contains(" ") || argument.indexOf("/by") >= 0) {
             throw new FridayException("Use this format: archive <task number> or archive all");
         }
         return new ArchiveCommand(parseTaskNumber(argument));
@@ -254,7 +261,12 @@ public class Parser {
             throw eventFormatException();
         }
 
-        return new Event(description, parseEventDateTime(fromText), parseEventDateTime(toText));
+        LocalDateTime from = parseEventDateTime(fromText);
+        LocalDateTime to = parseEventDateTime(toText);
+        if (!from.isBefore(to)) {
+            throw new FridayException("The event must start before it ends.");
+        }
+        return new Event(description, from, to);
     }
 
     /**
@@ -284,5 +296,15 @@ public class Parser {
     private static FridayException eventFormatException() {
         return new FridayException("Use this format: event <description> /from <yyyy-MM-dd HH:mm> "
                 + "/to <yyyy-MM-dd HH:mm>");
+    }
+
+    /**
+     * Trims outer whitespace and treats repeated whitespace as one separator.
+     *
+     * @param input Raw user input.
+     * @return Canonical command text.
+     */
+    private static String normalizeWhitespace(String input) {
+        return input.trim().replaceAll("\\s+", " ");
     }
 }

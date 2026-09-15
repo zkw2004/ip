@@ -49,6 +49,16 @@ public class TaskList {
     }
 
     /**
+     * Checks whether this list already contains equivalent task details.
+     *
+     * @param candidate Task whose details should be checked.
+     * @return Whether an equivalent task is already present.
+     */
+    public boolean containsEquivalent(Task candidate) {
+        return tasks.stream().anyMatch(task -> task.hasSameDetails(candidate));
+    }
+
+    /**
      * Gets the task at a zero-based index.
      *
      * @param index Zero-based task index.

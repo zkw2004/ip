@@ -45,4 +45,17 @@ class ChatbotTest {
         assertTrue(response.isError());
         assertTrue(response.text().contains("don't know what that means"));
     }
+
+    /**
+     * Verifies that adding duplicate task details is rejected without adding a second task.
+     */
+    @Test
+    void getResponse_duplicateTask_reportsFriendlyError() {
+        Chatbot chatbot = new Chatbot();
+
+        chatbot.getResponse("todo read book");
+        String response = chatbot.getResponse("todo read book");
+
+        assertTrue(response.contains("A task with those details already exists."));
+    }
 }
