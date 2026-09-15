@@ -1,7 +1,8 @@
 # FRIDAY GUI design
 
-The JavaFX GUI uses a compact, assistant-oriented conversation layout. FRIDAY replies are
-wide left-aligned cards with a small circular FRIDAY profile picture, while user commands
+The JavaFX GUI uses a compact, assistant-oriented conversation layout. Its header uses a
+circular FRIDAY profile picture and the greeting "Welcome home, Mr Stark". FRIDAY replies
+are wide left-aligned cards with a small circular FRIDAY profile picture, while user commands
 are compact right-aligned bubbles with a circular Tony Stark profile picture. User-correctable
 errors use a high-contrast red card and warning icon.
 

@@ -8,7 +8,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
+import javafx.scene.shape.Circle;
 
 /**
  * Coordinates the controls in {@code MainWindow.fxml} with a chatbot.
@@ -25,6 +27,9 @@ public class MainWindow {
 
     @FXML
     private Button sendButton;
+
+    @FXML
+    private ImageView headerPicture;
 
     private final Image userImage;
     private final Image chatbotImage;
@@ -52,6 +57,7 @@ public class MainWindow {
      */
     @FXML
     private void initialize() {
+        headerPicture.setClip(new Circle(20, 20, 20));
         dialogContainer.heightProperty().addListener((observable, oldHeight, newHeight) ->
                 Platform.runLater(() -> chatScroll.setVvalue(1.0)));
     }

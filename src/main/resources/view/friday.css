@@ -2,7 +2,6 @@
 #header { -fx-min-height: 64px; -fx-pref-height: 64px; -fx-max-height: 64px; -fx-padding: 0 16 0 16; -fx-spacing: 12; -fx-alignment: CENTER_LEFT; -fx-background-color: linear-gradient(to bottom, #24143A, #0B0B0F); }
 #logoCircle, .avatar { -fx-background-color: #15151C; -fx-background-radius: 20px; -fx-alignment: CENTER; }
 #logoCircle { -fx-min-width: 40px; -fx-min-height: 40px; -fx-pref-width: 40px; -fx-pref-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px; -fx-effect: dropshadow(gaussian, rgba(155, 63, 214, 0.55), 22, 0.35, 0, 0); }
-#logoSpark { -fx-content: "M12 1.6 L14.3 9.7 L22.4 12 L14.3 14.3 L12 22.4 L9.7 14.3 L1.6 12 L9.7 9.7 Z"; -fx-fill: linear-gradient(to bottom right, #FFB25C, #9B3FD6); -fx-scale-x: 0.92; -fx-scale-y: 0.92; }
 #titleLabel { -fx-text-fill: #FFFFFF; -fx-font-size: 18px; -fx-font-weight: 600; }
 #subtitleLabel { -fx-text-fill: #8C8C99; -fx-font-size: 12px; }
 #chatScroll, #chatScroll .viewport { -fx-background-color: #0B0B0F; -fx-border-width: 0; }
@@ -30,4 +29,4 @@
 #commandField { -fx-background-color: transparent; -fx-text-fill: #EDEDF2; -fx-prompt-text-fill: #6E6E7A; -fx-padding: 8 0 8 0; }
 #sendButton { -fx-min-width: 38px; -fx-min-height: 38px; -fx-pref-width: 38px; -fx-pref-height: 38px; -fx-max-width: 38px; -fx-max-height: 38px; -fx-background-color: linear-gradient(to right, #C8678A, #9B3FD6); -fx-background-radius: 19px; -fx-padding: 0; -fx-cursor: hand; }
 #sendButton:hover { -fx-effect: dropshadow(gaussian, rgba(155, 63, 214, 0.55), 16, 0.3, 0, 0); }
-#sendArrow { -fx-content: "M3.6 20.4 L21 12 L3.6 3.6 L6.2 12 Z"; -fx-fill: #FFFFFF; -fx-scale-x: 0.72; -fx-scale-y: 0.72; }
+#sendArrow { -fx-fill: #FFFFFF; -fx-scale-x: 0.72; -fx-scale-y: 0.72; }
