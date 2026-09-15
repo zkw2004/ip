@@ -54,4 +54,31 @@ public class Chatbot {
         responseUi.flush();
         return responseBuffer.toString(StandardCharsets.UTF_8).trim();
     }
+
+    /**
+     * Processes one user input and records whether the resulting response is an error.
+     *
+     * @param input Raw command entered by the user.
+     * @return The response text together with its display state.
+     */
+    public Response getResponseResult(String input) {
+        responseBuffer.reset();
+        try {
+            Command command = parser.parse(input);
+            command.execute(tasks, archivedTasks, responseUi, null, null);
+            responseUi.flush();
+            return new Response(responseBuffer.toString(StandardCharsets.UTF_8).trim(), false);
+        } catch (FridayException e) {
+            return new Response(e.getMessage(), true);
+        }
+    }
+
+    /**
+     * Describes a chatbot reply for a graphical user interface.
+     *
+     * @param text Text to show in the conversation.
+     * @param isError Whether the response represents a user-correctable error.
+     */
+    public record Response(String text, boolean isError) {
+    }
 }

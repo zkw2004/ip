@@ -32,4 +32,17 @@ class ChatbotTest {
 
         assertTrue(response.contains("Archiving is available only in the console app."));
     }
+
+    /**
+     * Verifies that invalid GUI commands provide a response that can receive error styling.
+     */
+    @Test
+    void getResponseResult_invalidCommand_marksResponseAsError() {
+        Chatbot chatbot = new Chatbot();
+
+        Chatbot.Response response = chatbot.getResponseResult("not-a-command");
+
+        assertTrue(response.isError());
+        assertTrue(response.text().contains("don't know what that means"));
+    }
 }
