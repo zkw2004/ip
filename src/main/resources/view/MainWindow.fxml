@@ -4,6 +4,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.SVGPath?>
@@ -12,10 +14,14 @@
       fx:controller="friday.MainWindow" styleClass="root" prefWidth="420.0" prefHeight="650.0"
       minWidth="360.0" minHeight="420.0">
     <HBox id="header">
-        <VBox id="logoCircle"><SVGPath id="logoSpark" /></VBox>
+        <VBox id="logoCircle">
+            <ImageView fx:id="headerPicture" fitWidth="40.0" fitHeight="40.0" preserveRatio="false" smooth="true">
+                <image><Image url="@../images/friday.png" /></image>
+            </ImageView>
+        </VBox>
         <VBox spacing="1.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
             <Label id="titleLabel" text="FRIDAY" />
-            <Label id="subtitleLabel" text="Your task assistant" />
+            <Label id="subtitleLabel" text="Welcome home, Mr Stark" />
         </VBox>
     </HBox>
     <ScrollPane fx:id="chatScroll" id="chatScroll" fitToWidth="true" hbarPolicy="NEVER"
@@ -27,7 +33,7 @@
             <TextField fx:id="commandField" id="commandField" promptText="Enter a command..."
                        onAction="#handleSend" HBox.hgrow="ALWAYS" />
             <Button fx:id="sendButton" id="sendButton" onAction="#handleSend" text="">
-                <graphic><SVGPath id="sendArrow" /></graphic>
+                <graphic><SVGPath id="sendArrow" content="M3.6 20.4 L21 12 L3.6 3.6 L6.2 12 Z" /></graphic>
             </Button>
         </HBox>
     </HBox>
