@@ -50,6 +50,12 @@ public class MainWindow {
      */
     public void setChatbot(Chatbot chatbot) {
         this.chatbot = chatbot;
+        if (dialogContainer.getChildren().isEmpty()) {
+            DialogBox welcome = DialogBox.getChatbotDialog(
+                    "Good day, Mr Stark. What can I assist you with?", chatbotImage);
+            welcome.bindMessageWidth(chatScroll.widthProperty());
+            dialogContainer.getChildren().add(welcome);
+        }
     }
 
     /**
@@ -75,7 +81,7 @@ public class MainWindow {
         Chatbot.Response response = chatbot.getResponseResult(input);
         DialogBox userDialog = DialogBox.getUserDialog(input, userImage);
         DialogBox replyDialog = response.isError()
-                ? DialogBox.getErrorDialog(response.text(), chatbotImage)
+                ? DialogBox.getErrorDialog("That presents a complication: " + response.text(), chatbotImage)
                 : DialogBox.getChatbotDialog(response.text(), chatbotImage);
         userDialog.bindMessageWidth(chatScroll.widthProperty());
         replyDialog.bindMessageWidth(chatScroll.widthProperty());

@@ -15,7 +15,7 @@ import friday.model.TaskList;
  */
 public class Ui {
     private static final String LINE = "____________________________________________________________";
-    private static final String NAME = "Friday";
+    private static final String NAME = "FRIDAY";
     private static final String BANNER = """
              _____    _     _
             |  ___| _(_) __| | __ _ _   _
@@ -52,8 +52,8 @@ public class Ui {
     public void showGreeting() {
         output.println(LINE);
         output.println(BANNER);
-        output.println("Hello! I'm " + NAME + ".");
-        output.println("What can I do for you?");
+        output.println("Good day, Mr Stark. I am " + NAME + ".");
+        output.println("What can I assist you with?");
         output.println(LINE);
     }
 
@@ -132,7 +132,7 @@ public class Ui {
      */
     public void showTaskAdded(Task task, int taskCount) {
         output.println(LINE);
-        output.println(" Got it. I've added this task:");
+        output.println(" Understood. I've added this task:");
         output.println("   " + task);
         output.println(" Now you have " + taskCount + " tasks in the list.");
         output.println(LINE);
@@ -146,7 +146,7 @@ public class Ui {
      */
     public void showTaskDeleted(Task task, int taskCount) {
         output.println(LINE);
-        output.println(" Noted. I've removed this task:");
+        output.println(" Confirmed. I've removed this task:");
         output.println("   " + task);
         output.println(" Now you have " + taskCount + " tasks in the list.");
         output.println(LINE);
@@ -159,7 +159,7 @@ public class Ui {
      */
     public void showTaskArchived(Task task) {
         output.println(LINE);
-        output.println(" Archived this task:");
+        output.println(" Confirmed. I've archived this task:");
         output.println(" " + task);
         output.println(LINE);
     }
@@ -183,7 +183,7 @@ public class Ui {
      */
     public void showTaskUnarchived(Task task) {
         output.println(LINE);
-        output.println(" Restored this task:");
+        output.println(" Confirmed. I've restored this task:");
         output.println(" " + task);
         output.println(LINE);
     }
@@ -227,9 +227,9 @@ public class Ui {
     public void showTaskStatus(Task task, boolean markDone) {
         output.println(LINE);
         if (markDone) {
-            output.println(" Nice! I've marked this task as done:");
+            output.println(" Confirmed. I've marked this task as done:");
         } else {
-            output.println(" OK, I've marked this task as not done yet:");
+            output.println(" Noted. I've marked this task as not done yet:");
         }
         output.println(" " + task);
         output.println(LINE);
@@ -242,7 +242,7 @@ public class Ui {
      */
     public void showError(String message) {
         output.println(LINE);
-        output.println(" OOPS!!! " + message);
+        output.println(" That presents a complication: " + message);
         output.println(LINE);
     }
 
@@ -251,7 +251,7 @@ public class Ui {
      */
     public void showExitMessage() {
         output.println(LINE);
-        output.println(" Bye. Hope to see you again soon!");
+        output.println(" Standing by.");
         output.println(LINE);
     }
 
