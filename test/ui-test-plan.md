@@ -21,11 +21,11 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -55,16 +55,16 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] read book
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [D][ ] return book (by: Dec 31 2026)
  Now you have 2 tasks in the list.
 ____________________________________________________________
@@ -87,7 +87,7 @@ ____________________________________________________________
  2. [D][ ] return book (by: Dec 31 2026)
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -111,14 +111,14 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
  There are no tasks to archive.
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -142,8 +142,8 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
  Here are the matching tasks in your list:
@@ -151,7 +151,7 @@ ____________________________________________________________
  2. [D][ ] return book (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -182,14 +182,14 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! The description of a todo cannot be empty.
+ That presents a complication: The description of a todo cannot be empty.
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -213,14 +213,14 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! I'm sorry, but I don't know what that means :-(
+ That presents a complication: I'm sorry, but I don't know what that means :-(
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -244,14 +244,14 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Use this format: deadline <description> /by <yyyy-MM-dd date>
+ That presents a complication: Use this format: deadline <description> /by <yyyy-MM-dd date>
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -277,24 +277,24 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] read book
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- Nice! I've marked this task as done:
+ Confirmed. I've marked this task as done:
  [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
- OK, I've marked this task as not done yet:
+ Noted. I've marked this task as not done yet:
  [T][ ] read book
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -322,23 +322,23 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] read book
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Please enter a valid task number.
+ That presents a complication: Please enter a valid task number.
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][ ] read book
 ____________________________________________________________
 ____________________________________________________________
- Nice! I've marked this task as done:
+ Confirmed. I've marked this task as done:
  [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
@@ -346,7 +346,7 @@ ____________________________________________________________
  1. [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -374,23 +374,23 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] revise notes
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Use this format: event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>
+ That presents a complication: Use this format: event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][ ] revise notes
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [D][ ] submit report (by: Oct 15 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
@@ -400,7 +400,7 @@ ____________________________________________________________
  2. [D][ ] submit report (by: Oct 15 2019)
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -428,29 +428,29 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] read chapter
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! I'm sorry, but I don't know what that means :-(
+ That presents a complication: I'm sorry, but I don't know what that means :-(
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! I'm sorry, but I don't know what that means :-(
+ That presents a complication: I'm sorry, but I don't know what that means :-(
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! I'm sorry, but I don't know what that means :-(
+ That presents a complication: I'm sorry, but I don't know what that means :-(
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][ ] read chapter
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -479,21 +479,21 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] read book
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [D][ ] return book (by: Jun 06 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [E][ ] project meeting (from: Aug 06 2019 14:00 to: Aug 06 2019 16:00)
  Now you have 3 tasks in the list.
 ____________________________________________________________
@@ -504,7 +504,7 @@ ____________________________________________________________
  3. [E][ ] project meeting (from: Aug 06 2019 14:00 to: Aug 06 2019 16:00)
 ____________________________________________________________
 ____________________________________________________________
- Noted. I've removed this task:
+ Confirmed. I've removed this task:
    [D][ ] return book (by: Jun 06 2019)
  Now you have 2 tasks in the list.
 ____________________________________________________________
@@ -514,7 +514,7 @@ ____________________________________________________________
  2. [E][ ] project meeting (from: Aug 06 2019 14:00 to: Aug 06 2019 16:00)
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -543,21 +543,21 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] borrow book
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] return notes
  Now you have 2 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Please enter a valid task number.
+ That presents a complication: Please enter a valid task number.
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
@@ -565,7 +565,7 @@ ____________________________________________________________
  2. [T][ ] return notes
 ____________________________________________________________
 ____________________________________________________________
- Noted. I've removed this task:
+ Confirmed. I've removed this task:
    [T][ ] borrow book
  Now you have 1 tasks in the list.
 ____________________________________________________________
@@ -574,7 +574,7 @@ ____________________________________________________________
  1. [T][ ] return notes
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -601,26 +601,26 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Please enter a valid task number.
+ That presents a complication: Please enter a valid task number.
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] plan trip
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Please enter a valid task number.
+ That presents a complication: Please enter a valid task number.
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][ ] plan trip
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -649,27 +649,27 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] submit quiz
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- Nice! I've marked this task as done:
+ Confirmed. I've marked this task as done:
  [T][X] submit quiz
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Please enter a valid task number.
+ That presents a complication: Please enter a valid task number.
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][X] submit quiz
 ____________________________________________________________
 ____________________________________________________________
- OK, I've marked this task as not done yet:
+ Noted. I've marked this task as not done yet:
  [T][ ] submit quiz
 ____________________________________________________________
 ____________________________________________________________
@@ -677,7 +677,7 @@ ____________________________________________________________
  1. [T][ ] submit quiz
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -702,20 +702,20 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- Got it. I've added this task:
+ Understood. I've added this task:
    [T][ ] read book
  Now you have 1 tasks in the list.
 ____________________________________________________________
 ____________________________________________________________
- Nice! I've marked this task as done:
+ Confirmed. I've marked this task as done:
  [T][X] read book
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -739,8 +739,8 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
@@ -749,7 +749,7 @@ ____________________________________________________________
  3. [E][X] project meeting (from: Aug 06 2019 14:00 to: Aug 06 2019 16:00)
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -780,14 +780,14 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -811,17 +811,17 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! I skipped corrupted task data on line 2: completion status must be 0 or 1.
+ That presents a complication: I skipped corrupted task data on line 2: completion status must be 0 or 1.
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! I skipped corrupted task data on line 3: unknown task type 'X'.
+ That presents a complication: I skipped corrupted task data on line 3: unknown task type 'X'.
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! I skipped corrupted task data on line 4: wrong number of fields for task type 'E'.
+ That presents a complication: I skipped corrupted task data on line 4: wrong number of fields for task type 'E'.
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
@@ -829,7 +829,7 @@ ____________________________________________________________
  2. [D][ ] valid deadline (by: Jun 06 2019)
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -862,15 +862,15 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
  Here are the tasks in your list:
  1. [T][ ] compare A | B in C:\temp
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
 
@@ -900,16 +900,16 @@ ____________________________________________________________
 |_|  |_|  |_|\__,_|\__,_|\__, |
                          |___/
 
-Hello! I'm Friday.
-What can I do for you?
+Good day, Mr Stark. I am FRIDAY.
+What can I assist you with?
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Use this format: deadline <description> /by <yyyy-MM-dd date>
+ That presents a complication: Use this format: deadline <description> /by <yyyy-MM-dd date>
 ____________________________________________________________
 ____________________________________________________________
- OOPS!!! Use this format: event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>
+ That presents a complication: Use this format: event <description> /from <yyyy-MM-dd HH:mm> /to <yyyy-MM-dd HH:mm>
 ____________________________________________________________
 ____________________________________________________________
- Bye. Hope to see you again soon!
+ Standing by.
 ____________________________________________________________
 ```
