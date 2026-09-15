@@ -1,5 +1,6 @@
 package friday.command;
 
+import friday.exception.FridayException;
 import friday.model.Task;
 import friday.model.TaskList;
 import friday.storage.Storage;
@@ -28,7 +29,11 @@ public class AddCommand extends Command {
      * @param storage Storage available to the command; saving is coordinated by Friday.
      */
     @Override
-    public void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage, Storage archiveStorage) {
+    public void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage, Storage archiveStorage)
+            throws FridayException {
+        if (tasks.containsEquivalent(task) || archivedTasks.containsEquivalent(task)) {
+            throw new FridayException("A task with those details already exists.");
+        }
         tasks.add(task);
         ui.showTaskAdded(task, tasks.size());
     }

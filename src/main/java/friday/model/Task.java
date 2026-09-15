@@ -34,6 +34,17 @@ public class Task {
     }
 
     /**
+     * Checks whether two tasks have the same type and user-visible details.
+     *
+     * @param other Task to compare with this task.
+     * @return Whether both tasks represent the same task details.
+     */
+    public boolean hasSameDetails(Task other) {
+        return other != null && getClass().equals(other.getClass())
+                && description.equals(other.description);
+    }
+
+    /**
      * Returns the marker used in the task's display representation.
      *
      * @return {@code X} for a completed task, or a space otherwise.
