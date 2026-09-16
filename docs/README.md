@@ -1,13 +1,13 @@
 # FRIDAY User Guide
 
-![FRIDAY logo](../F.R.I.D.A.Y.png)
+![FRIDAY logo](F.R.I.D.A.Y.png)
 
 FRIDAY is a personal task assistant for managing to-dos, deadlines, and events.
 She is composed, precise, and quietly witty—efficient without being cold.
 
-> [!TIP]
-> Start with the graphical interface for a compact chat experience, or use the
-> console interface when you need archive commands and file-backed persistence.
+> **Tip:** Start with the graphical interface for a compact chat experience, or
+> use the console interface when you need archive commands and file-backed
+> persistence.
 
 ## Quick start
 
@@ -135,9 +135,8 @@ The last command is rejected as a duplicate. Error messages explain the
 correction needed and begin with FRIDAY’s calm warning, “That presents a
 complication.”
 
-> [!WARNING]
-> Dates use strict ISO formats. February 30, invalid times, and events whose
-> end is not later than their start are not accepted.
+> **Warning:** Dates use strict ISO formats. February 30, invalid times, and
+> events whose end is not later than their start are not accepted.
 
 ## Data and recovery
 
@@ -174,4 +173,4 @@ If the application does not start:
    `friday.Launcher` for the GUI or `friday.Friday` for the console.
 
 For development and contribution information, see the repository
-[`README.md`](../README.md).
+[`README.md`](https://github.com/zkw2004/ip/blob/master/README.md).
