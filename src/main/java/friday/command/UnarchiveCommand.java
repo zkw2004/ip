@@ -33,6 +33,15 @@ public class UnarchiveCommand extends Command {
     }
 
     /**
+     * Returns the selected archive number, or {@code null} when restoring all tasks.
+     *
+     * @return The selected archive number or {@code null} for all tasks.
+     */
+    public Integer getArchiveNumber() {
+        return archiveNumber;
+    }
+
+    /**
      * Moves selected archived tasks into active storage before changing either list.
      *
      * @param tasks Current active task list.

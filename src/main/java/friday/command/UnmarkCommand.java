@@ -22,6 +22,15 @@ public class UnmarkCommand extends Command {
     }
 
     /**
+     * Returns the one-based task number selected by this command.
+     *
+     * @return The selected task number.
+     */
+    public int getTaskNumber() {
+        return taskNumber;
+    }
+
+    /**
      * Marks the requested task as incomplete and reports the change.
      *
      * @param tasks Current task list to modify.

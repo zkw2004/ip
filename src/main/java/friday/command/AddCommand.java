@@ -22,6 +22,15 @@ public class AddCommand extends Command {
     }
 
     /**
+     * Returns the task this command adds.
+     *
+     * @return The task supplied when the command was created.
+     */
+    public Task getTask() {
+        return task;
+    }
+
+    /**
      * Adds the stored task and reports the updated list to the user.
      *
      * @param tasks Current task list to modify.

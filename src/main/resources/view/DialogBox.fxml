@@ -19,6 +19,8 @@
             <SVGPath fx:id="warningIcon" styleClass="warning-icon" managed="false" visible="false" />
             <Label fx:id="dialog" styleClass="body-label" wrapText="true" HBox.hgrow="ALWAYS" />
         </HBox>
+        <VBox fx:id="taskList" spacing="8.0" managed="false" visible="false" />
+        <Label fx:id="footer" styleClass="task-footer" wrapText="true" managed="false" visible="false" />
         <VBox fx:id="actions" spacing="8.0">
             <Region styleClass="card-divider" />
             <HBox alignment="CENTER_LEFT">

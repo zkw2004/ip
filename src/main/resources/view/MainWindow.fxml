@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -15,13 +14,11 @@
       minWidth="360.0" minHeight="420.0">
     <HBox id="header">
         <VBox id="logoCircle">
-            <ImageView fx:id="headerPicture" fitWidth="40.0" fitHeight="40.0" preserveRatio="false" smooth="true">
-                <image><Image url="@../images/friday.png" /></image>
-            </ImageView>
+            <SVGPath id="logoSpark" content="M12 1.6 L14.3 9.7 L22.4 12 L14.3 14.3 L12 22.4 L9.7 14.3 L1.6 12 L9.7 9.7 Z" />
         </VBox>
         <VBox spacing="1.0" alignment="CENTER_LEFT" HBox.hgrow="ALWAYS">
             <Label id="titleLabel" text="FRIDAY" />
-            <Label id="subtitleLabel" text="Welcome home, Mr Stark" />
+            <Label id="subtitleLabel" text="Your task assistant" />
         </VBox>
     </HBox>
     <ScrollPane fx:id="chatScroll" id="chatScroll" fitToWidth="true" hbarPolicy="NEVER"
