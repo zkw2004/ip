@@ -33,6 +33,15 @@ public class ArchiveCommand extends Command {
     }
 
     /**
+     * Returns the selected task number, or {@code null} when archiving all tasks.
+     *
+     * @return The selected task number or {@code null} for all tasks.
+     */
+    public Integer getTaskNumber() {
+        return taskNumber;
+    }
+
+    /**
      * Moves selected active tasks into archive storage before changing either list.
      *
      * @param tasks Current active task list.

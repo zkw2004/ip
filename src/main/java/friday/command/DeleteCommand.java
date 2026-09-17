@@ -11,6 +11,7 @@ import friday.ui.Ui;
  */
 public class DeleteCommand extends Command {
     private final int taskNumber;
+    private Task deletedTask;
 
     /**
      * Creates a delete command.
@@ -19,6 +20,15 @@ public class DeleteCommand extends Command {
      */
     public DeleteCommand(int taskNumber) {
         this.taskNumber = taskNumber;
+    }
+
+    /**
+     * Returns the task removed by the most recent successful execution.
+     *
+     * @return The removed task, or {@code null} before successful execution.
+     */
+    public Task getDeletedTask() {
+        return deletedTask;
     }
 
     /**
@@ -34,6 +44,7 @@ public class DeleteCommand extends Command {
             Storage archiveStorage) throws FridayException {
         Task task = getTask(tasks, taskNumber);
         tasks.remove(taskNumber - 1);
+        deletedTask = task;
         ui.showTaskDeleted(task, tasks.size());
     }
 

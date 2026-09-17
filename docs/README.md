@@ -159,9 +159,10 @@ want the files to appear in the repository's `data/` directory.
 
 FRIDAY’s responses are concise and professional, with occasional understated
 wit. Common acknowledgements include **Understood**, **Confirmed**, and **Noted**.
-The GUI reinforces this identity with a deep-navy and electric-cyan palette,
-compact asymmetric message cards, circular participant images, and distinct
-error cards.
+The GUI uses a charcoal, purple, and pink mobile-inspired chat design. Task
+responses are rendered as cards with readable **To-do**, **Deadline**, and
+**Event** labels, completion checkboxes, and schedule details instead of raw
+console markers.
 
 For the implementation design, see [`docs/ui-design.md`](ui-design.md).
 

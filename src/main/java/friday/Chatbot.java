@@ -9,7 +9,16 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import friday.command.AddCommand;
+import friday.command.ArchiveCommand;
 import friday.command.Command;
+import friday.command.DeleteCommand;
+import friday.command.FindCommand;
+import friday.command.ListArchiveCommand;
+import friday.command.ListCommand;
+import friday.command.MarkCommand;
+import friday.command.UnarchiveCommand;
+import friday.command.UnmarkCommand;
 import friday.exception.FridayException;
 import friday.model.TaskList;
 import friday.parser.Parser;
@@ -91,8 +100,9 @@ public class Chatbot {
         responseBuffer.reset();
         boolean isExit = false;
         boolean isError = false;
+        Command command = null;
         try {
-            Command command = parser.parse(input);
+            command = parser.parse(input);
             isExit = command.isExit();
             Storage availableStorage = canSaveTasks ? storage : null;
             Storage availableArchiveStorage = canSaveArchivedTasks ? archiveStorage : null;
@@ -107,7 +117,10 @@ public class Chatbot {
         responseUi.flush();
         String response = responseBuffer.toString(StandardCharsets.UTF_8).trim();
         response = removeConsoleDividers(response);
-        return new Response(response, isError, isExit);
+        ReplyContent replyContent = isError || command == null
+                ? new ReplyContent(response, List.of(), "")
+                : createReplyContent(command, response);
+        return new Response(replyContent.text(), isError, isExit, replyContent.taskCards(), replyContent.footer());
     }
 
     /**
@@ -150,7 +163,56 @@ public class Chatbot {
                 .trim();
     }
 
+    private ReplyContent createReplyContent(Command command, String fallbackText) {
+        if (command instanceof ListCommand) {
+            return new ReplyContent("Here are your tasks:", toTaskCards(tasks), "");
+        }
+        if (command instanceof ListArchiveCommand) {
+            return new ReplyContent("Here are your archived tasks:", toTaskCards(archivedTasks), "");
+        }
+        if (command instanceof FindCommand findCommand) {
+            List<TaskCard> cards = findCommand.findMatches(tasks).stream().map(TaskCard::from).toList();
+            return new ReplyContent("Here are the matching tasks:", cards,
+                    cards.isEmpty() ? "No matching tasks found." : "");
+        }
+        if (command instanceof AddCommand addCommand) {
+            return new ReplyContent("Understood. I've added this task:", List.of(TaskCard.from(addCommand.getTask())),
+                    "Now you have " + tasks.size() + " tasks in the list.");
+        }
+        if (command instanceof DeleteCommand deleteCommand) {
+            return new ReplyContent("Confirmed. I've removed this task:",
+                    List.of(TaskCard.from(deleteCommand.getDeletedTask())),
+                    "Now you have " + tasks.size() + " tasks in the list.");
+        }
+        if (command instanceof MarkCommand markCommand) {
+            return taskStatusReply("Confirmed. I've marked this task as done:", markCommand.getTaskNumber());
+        }
+        if (command instanceof UnmarkCommand unmarkCommand) {
+            return taskStatusReply("Noted. I've marked this task as not done yet:", unmarkCommand.getTaskNumber());
+        }
+        if (command instanceof ArchiveCommand archiveCommand && archiveCommand.getTaskNumber() != null) {
+            TaskCard card = TaskCard.from(archivedTasks.get(archivedTasks.size() - 1));
+            return new ReplyContent("Confirmed. I've archived this task:", List.of(card), "");
+        }
+        if (command instanceof UnarchiveCommand unarchiveCommand && unarchiveCommand.getArchiveNumber() != null) {
+            TaskCard card = TaskCard.from(tasks.get(tasks.size() - 1));
+            return new ReplyContent("Confirmed. I've restored this task:", List.of(card), "");
+        }
+        return new ReplyContent(fallbackText, List.of(), "");
+    }
+
+    private ReplyContent taskStatusReply(String introduction, int taskNumber) {
+        return new ReplyContent(introduction, List.of(TaskCard.from(tasks.get(taskNumber - 1))), "");
+    }
+
+    private static List<TaskCard> toTaskCards(TaskList taskList) {
+        return taskList.asList().stream().map(TaskCard::from).toList();
+    }
+
     private record Session(TaskList tasks, boolean canSave, List<String> warnings) {
+    }
+
+    private record ReplyContent(String text, List<TaskCard> taskCards, String footer) {
     }
 
     /**
@@ -159,7 +221,9 @@ public class Chatbot {
      * @param text Text to show in the conversation.
      * @param isError Whether the response represents a user-correctable error.
      * @param isExit Whether the response came from the exit command.
+     * @param taskCards Structured cards to render after the response text.
+     * @param footer Optional summary rendered after the task cards.
      */
-    public record Response(String text, boolean isError, boolean isExit) {
+    public record Response(String text, boolean isError, boolean isExit, List<TaskCard> taskCards, String footer) {
     }
 }

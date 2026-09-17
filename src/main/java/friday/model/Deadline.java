@@ -24,6 +24,15 @@ public class Deadline extends Task {
     }
 
     /**
+     * Returns the date by which this task is due.
+     *
+     * @return The due date.
+     */
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    /**
      * Checks whether another deadline has the same description and due date.
      *
      * @param other Task to compare with this deadline.

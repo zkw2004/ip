@@ -23,6 +23,16 @@ public class FindCommand extends Command {
     }
 
     /**
+     * Finds this command's matching tasks without producing console output.
+     *
+     * @param tasks Task list to search.
+     * @return Tasks whose descriptions match this command's keyword.
+     */
+    public List<Task> findMatches(TaskList tasks) {
+        return tasks.find(keyword);
+    }
+
+    /**
      * Displays tasks matching the command's keyword.
      *
      * @param tasks Current task list to search.
@@ -31,7 +41,7 @@ public class FindCommand extends Command {
      */
     @Override
     public void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage, Storage archiveStorage) {
-        List<Task> matchingTasks = tasks.find(keyword);
+        List<Task> matchingTasks = findMatches(tasks);
         ui.showMatchingTasks(matchingTasks);
     }
 }

@@ -54,6 +54,15 @@ public class Task {
     }
 
     /**
+     * Returns whether this task is complete.
+     *
+     * @return Whether the task has been marked as done.
+     */
+    public boolean isDone() {
+        return isDone;
+    }
+
+    /**
      * Marks this task as completed.
      */
     public void markAsDone() {

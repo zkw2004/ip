@@ -1,6 +1,7 @@
 package friday;
 
 import java.io.IOException;
+import java.util.List;
 
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableNumberValue;
@@ -13,6 +14,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.SVGPath;
@@ -35,6 +38,12 @@ public class DialogBox extends HBox {
 
     @FXML
     private VBox actions;
+
+    @FXML
+    private VBox taskList;
+
+    @FXML
+    private Label footer;
 
     @FXML
     private SVGPath warningIcon;
@@ -119,6 +128,52 @@ public class DialogBox extends HBox {
         card.maxWidthProperty().bind(Bindings.min(480,
                 Bindings.max(160, Bindings.subtract(conversationWidth, reservedWidth))));
         dialog.maxWidthProperty().bind(card.maxWidthProperty().subtract(30));
+    }
+
+    /**
+     * Displays structured task cards beneath an optional reply introduction.
+     *
+     * @param taskCards Tasks to display.
+     * @param footerText Optional summary displayed after the cards.
+     */
+    public void setTaskCards(List<TaskCard> taskCards, String footerText) {
+        taskList.getChildren().setAll(taskCards.stream().map(DialogBox::buildTaskRow).toList());
+        boolean hasTasks = !taskCards.isEmpty();
+        taskList.setManaged(hasTasks);
+        taskList.setVisible(hasTasks);
+        boolean hasFooter = footerText != null && !footerText.isBlank();
+        footer.setText(hasFooter ? footerText : "");
+        footer.setManaged(hasFooter);
+        footer.setVisible(hasFooter);
+    }
+
+    private static HBox buildTaskRow(TaskCard taskCard) {
+        StackPane checkbox = new StackPane();
+        checkbox.getStyleClass().add(taskCard.isDone() ? "task-check-done" : "task-check-empty");
+        if (taskCard.isDone()) {
+            SVGPath check = new SVGPath();
+            check.setContent("M4 12.5 L9.5 18 L20 6");
+            check.getStyleClass().add("task-check-icon");
+            checkbox.getChildren().add(check);
+        }
+
+        Label title = new Label(taskCard.title());
+        title.getStyleClass().add("task-title");
+        title.setWrapText(true);
+        Label metadata = new Label(taskCard.metadata());
+        metadata.getStyleClass().add("task-meta");
+        boolean hasMetadata = !taskCard.metadata().isBlank();
+        metadata.setManaged(hasMetadata);
+        metadata.setVisible(hasMetadata);
+        VBox textColumn = new VBox(3, title, metadata);
+        HBox.setHgrow(textColumn, Priority.ALWAYS);
+
+        Label category = new Label(taskCard.category().getLabel());
+        category.getStyleClass().addAll("task-pill", "task-pill-" + taskCard.category().getStyleKey());
+        HBox row = new HBox(10, checkbox, textColumn, category);
+        row.getStyleClass().add("task-row");
+        row.setAlignment(Pos.TOP_LEFT);
+        return row;
     }
 
     /**

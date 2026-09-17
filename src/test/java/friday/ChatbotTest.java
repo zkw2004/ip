@@ -25,10 +25,12 @@ class ChatbotTest {
     void getResponse_addTask_returnsTaskConfirmation() {
         Chatbot chatbot = createChatbot();
 
-        String response = chatbot.getResponse("todo read book");
+        Chatbot.Response response = chatbot.getResponseResult("todo read book");
 
-        assertTrue(response.contains("I've added this task"));
-        assertTrue(response.contains("[T][ ] read book"));
+        assertTrue(response.text().contains("I've added this task"));
+        assertEquals(1, response.taskCards().size());
+        assertEquals("To-do", response.taskCards().get(0).category().getLabel());
+        assertEquals("read book", response.taskCards().get(0).title());
     }
 
     /**
@@ -43,7 +45,7 @@ class ChatbotTest {
 
         assertTrue(response.contains("archived this task"));
         assertFalse(chatbot.getResponse("list").contains("read book"));
-        assertTrue(chatbot.getResponse("list-archive").contains("read book"));
+        assertEquals("read book", chatbot.getResponseResult("list-archive").taskCards().get(0).title());
         assertEquals(1, new Storage(temporaryDirectory.resolve("archive.txt").toString()).load()
                 .getTasks().size());
     }
@@ -59,7 +61,7 @@ class ChatbotTest {
 
         Chatbot secondChatbot = createChatbot();
 
-        assertTrue(secondChatbot.getResponse("list-archive").contains("read book"));
+        assertEquals("read book", secondChatbot.getResponseResult("list-archive").taskCards().get(0).title());
     }
 
     /**
