@@ -19,6 +19,7 @@
 .bubble-user .body-label { -fx-text-fill: #FFFFFF; }
 .card-divider { -fx-min-height: 1px; -fx-pref-height: 1px; -fx-max-height: 1px; -fx-background-color: #2A3F5F; }
 .icon-button { -fx-background-color: transparent; -fx-text-fill: #9A9AA6; -fx-padding: 4 5 4 5; -fx-cursor: hand; }
+.copy-icon { -fx-fill: #9A9AA6; -fx-scale-x: 0.75; -fx-scale-y: 0.75; }
 .icon-button:hover { -fx-background-color: #2A2A33; -fx-background-radius: 6px; }
 .card-error { -fx-background-color: #2A1416; -fx-background-radius: 22 22 22 6; -fx-border-color: #E5484D; -fx-border-width: 1px; -fx-border-radius: 22 22 22 6; -fx-padding: 12 15 12 15; }
 .card-error .body-label { -fx-text-fill: #FFD1D2; }

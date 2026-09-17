@@ -23,7 +23,7 @@ public class ListArchiveCommand extends Command {
     public void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage,
             Storage archiveStorage) throws FridayException {
         if (archiveStorage == null) {
-            throw new FridayException("Archiving is available only in the console app.");
+            throw new FridayException("Archive storage is unavailable. Please check the task data files.");
         }
         ui.showArchivedTaskList(archivedTasks);
     }

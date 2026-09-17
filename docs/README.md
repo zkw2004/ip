@@ -5,9 +5,8 @@
 FRIDAY is a personal task assistant for managing to-dos, deadlines, and events.
 She is composed, precise, and quietly witty—efficient without being cold.
 
-> **Tip:** Start with the graphical interface for a compact chat experience, or
-> use the console interface when you need archive commands and file-backed
-> persistence.
+> **Tip:** Start with either interface for a compact chat experience and
+> file-backed task management.
 
 ## Quick start
 
@@ -69,9 +68,10 @@ Task numbers are one-based: the first task is task `1`.
 | `unmark <task number>` | Marks a task as incomplete. | `unmark 1` |
 | `delete <task number>` | Removes a task. | `delete 2` |
 
-### Archive tasks (console only)
+### Archive tasks
 
-Archive commands require the console interface because they update both the
+Archive commands move tasks between the active list and the archive. They are
+available in both the GUI and console interfaces because both use the same
 active and archive data files.
 
 | Command | Description | Example |
@@ -150,8 +150,10 @@ The console stores active tasks in `data/friday.txt` and archived tasks in
 - If a file cannot be read or written, FRIDAY reports the problem and keeps the
   in-memory session running where possible.
 
-The GUI currently uses an in-memory task session; archive commands and file
-persistence are console-only.
+Both the GUI and console load active tasks from `data/friday.txt` and archived
+tasks from `data/archive.txt`. These files are created when needed. When
+running from IntelliJ, set the working directory to the project root if you
+want the files to appear in the repository's `data/` directory.
 
 ## Personality and interface
 

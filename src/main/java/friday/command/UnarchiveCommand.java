@@ -45,7 +45,7 @@ public class UnarchiveCommand extends Command {
     @Override
     public void execute(TaskList tasks, TaskList archivedTasks, Ui ui, Storage storage,
             Storage archiveStorage) throws FridayException {
-        requireConsoleStorage(storage, archiveStorage);
+        requireStorage(storage, archiveStorage);
         if (archiveNumber == null) {
             unarchiveAll(tasks, archivedTasks, ui, storage, archiveStorage);
             return;
@@ -97,9 +97,9 @@ public class UnarchiveCommand extends Command {
         }
     }
 
-    private static void requireConsoleStorage(Storage storage, Storage archiveStorage) throws FridayException {
+    private static void requireStorage(Storage storage, Storage archiveStorage) throws FridayException {
         if (storage == null || archiveStorage == null) {
-            throw new FridayException("Archiving is available only in the console app.");
+            throw new FridayException("Archive storage is unavailable. Please check the task data files.");
         }
     }
 }

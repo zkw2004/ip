@@ -55,6 +55,12 @@ public class MainWindow {
                     "Good day, Mr Stark. What can I assist you with?", chatbotImage);
             welcome.bindMessageWidth(chatScroll.widthProperty());
             dialogContainer.getChildren().add(welcome);
+            for (String warning : chatbot.getStartupWarnings()) {
+                DialogBox warningDialog = DialogBox.getErrorDialog(
+                        "That presents a complication: " + warning, chatbotImage);
+                warningDialog.bindMessageWidth(chatScroll.widthProperty());
+                dialogContainer.getChildren().add(warningDialog);
+            }
         }
     }
 
@@ -87,6 +93,11 @@ public class MainWindow {
         replyDialog.bindMessageWidth(chatScroll.widthProperty());
         dialogContainer.getChildren().addAll(userDialog, replyDialog);
         commandField.clear();
+        if (response.isExit()) {
+            commandField.setDisable(true);
+            sendButton.setDisable(true);
+            Platform.exit();
+        }
     }
 
     /**
